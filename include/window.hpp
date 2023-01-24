@@ -7,8 +7,7 @@
 
 namespace dg {
 
-
-//faire une encapsulation de window pour la draw quand le core se lance
+//faire une encapsulation de window sans aucun call opengl pour la draw quand le core se lance
 class window {
 public:
     window(const std::string &name = "Window", u_int sw = 1024, u_int sh = 512): _sw(sw), _sh(sh), _name(name) {};
