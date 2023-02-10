@@ -36,23 +36,11 @@ float position[6] = { //test
 };
 
 void dg::core::display() {
-    //u_int buffer; //test
-
-    //glEnableVertexAttribArray(0);//test
-    //glGenBuffers(1, &buffer);//test
-    //glBindBuffer(GL_ARRAY_BUFFER, buffer);//test
-    //glBufferData(GL_ARRAY_BUFFER, 6 *sizeof(float), position, GL_STATIC_DRAW);//test
-    //glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);//test
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);//test
-    //glDisableVertexAttribArray(0);//test
 }
 
 void dg::core::idleDisplay() {
-
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);//test
-    //glDisableVertexAttribArray(0);//test
 }
 
 void dg::window::start(int argc, char **argv, bool debug = false) {

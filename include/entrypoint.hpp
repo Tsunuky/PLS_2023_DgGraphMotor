@@ -1,3 +1,4 @@
 #pragma once
 
-extern dg::application *createApplication();
+//extern application *createApplication();
+//a recheck
