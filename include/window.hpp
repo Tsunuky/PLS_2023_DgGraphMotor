@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GL/glx.h>
+#include <GL/glext.h>
 #include <GL/glut.h>
 #include <string>
 
