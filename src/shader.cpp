@@ -1,10 +1,10 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include <GL/glx.h>
-#include <GL/glext.h>
-#include <iostream>
-#include <string>
-#include "shader.hpp"
+//#include <GL/glext.h>
+
+#include <log.hpp>
+#include <shader.hpp>
 
 static void errorShaderCompile(u_int id, u_int type, const std::string &mess) {
     int lenght = 0;
@@ -14,23 +14,23 @@ static void errorShaderCompile(u_int id, u_int type, const std::string &mess) {
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &lenght);
         message = (char *)alloca(sizeof(char) * lenght);
         glGetShaderInfoLog(id, lenght, &lenght, message);
-        std::cerr << "Failed to compile " << (type == GL_VERTEX_SHADER  ? "vertex" : "fragment") << " shader !!" << std::endl;
+        DG_CORE_WARN("Failed to compile {0} shader !!", (type == GL_VERTEX_SHADER  ? "vertex" : "fragment"));
         glDeleteShader(id);
     }
     if (mess == "link") {
         glGetProgramiv(id, GL_INFO_LOG_LENGTH, &lenght);
         message = (char *)alloca(sizeof(char) * lenght);
         glGetProgramInfoLog(id, lenght, &lenght, message);
-        std::cout << "Error link prog: " << lenght << std::endl;
+        DG_CORE_WARN("Error link prog: {0}", lenght );
     }
     if (mess == "program") {
         glGetProgramiv(id, GL_INFO_LOG_LENGTH, &lenght);
         message = (char *)alloca(sizeof(char) * lenght);
         glGetProgramInfoLog(id, lenght, &lenght, message);
-        std::cout << "Invalid shader prog: " << lenght << std::endl;
+        DG_CORE_WARN("Invalid shader prog: {0} ", lenght);
         glDeleteProgram(id);
     }
-    std::cerr << message << std::endl;
+    DG_CORE_WARN(message);
 }
 
 static u_int compileShader(u_int type, const std::string &source) {
@@ -54,9 +54,9 @@ void dg::shader::attachShader() const {
 }
 
 void dg::shader::printId() const {
-    std::cout << "prog id " << _shader_id << std::endl;
-    std::cout << "u_int vs " << _vertex_id << std::endl;
-    std::cout << "u_int fs " << _fragment_id << std::endl;
+    DG_CORE_INFO("prog id {0}",  _shader_id);
+    DG_CORE_INFO("u_int vs {0}",  _vertex_id);
+    DG_CORE_INFO("u_int fs {0}",  _fragment_id);
 };
 
 void dg::shader::createShader(const std::string &vertex, const std::string &fragment) {

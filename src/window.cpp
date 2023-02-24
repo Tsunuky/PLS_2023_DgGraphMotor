@@ -1,26 +1,29 @@
-#include <iostream>
-#include "window.hpp"
+//#include <precompile.hpp>
+#include <GL/glut.h>
 
-void dg::window::initWindow() {
+#include <log.hpp>
+#include <window.hpp>
+
+void dg::window_GL::initWindow() {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(_sw, _sh);
+    glutInitWindowSize(this->_sw, this->_sh);
     glutInitWindowPosition(_sw/2, _sh/2);
     if (glutCreateWindow(_name.c_str()) == 0)
-        std::cerr << "Error creating window" << std::endl;
+        DG_CORE_FATAL("Error creating window");
 }
 
-void dg::window::clearColor(const dg::rgba &color) {
+void dg::window_GL::clearColor(const dg::rgba &color) {
     glClearColor (color.r, color.g, color.b, color.a);
 }
 
-void dg::window::setOrtho(double left, double right, double bottom, double top) {
+void dg::window_GL::setOrtho(double left, double right, double bottom, double top) {
     gluOrtho2D(left, right, bottom, top);
 };
 
-void dg::window::setOrtho() {
+void dg::window_GL::setOrtho() {
     gluOrtho2D(0, _sw, _sh, 0);
 }
 
-void dg::window::scalePixel(float scale) {
+void dg::window_GL::scalePixel(float scale) {
     glPointSize(scale);
 }

@@ -3,7 +3,7 @@
 #include <log.hpp>
 #include <window.hpp>
 
-class application: public dg::window {
+class application: public dg::window_GL {
 public:
     application() {
         this->setOrtho();

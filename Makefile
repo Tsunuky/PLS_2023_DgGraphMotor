@@ -1,14 +1,26 @@
-MOD		=	`pwd | rev | cut -d "/" -f3 | rev`
+MOD			=	`pwd | rev | cut -d "/" -f3 | rev`
 
-BIN		=	`pwd | rev | cut -d "/" -f1 | rev`
-OUTPUT 	= libprout.so
-FLAG		=	-W -Wall -Wextra -g3
+BIN			=	`pwd | rev | cut -d "/" -f1 | rev`
 
-INCLUDE	=	-I./include/ -I./submodule/spdlog/include/spdlog
-SRC		=	$(wildcard src/*.cpp)
-OBJ		=	$(SRC:.cpp=.o)
-LIB		=	-lstdc++ -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
-LIB		+=  -L./submodule/spdlog/build/ -lspdlog
+FLAG		=	-std=c++20 -W -Wall -Wextra -g3
+
+INCLUDE		=	-I./include/ 
+INCLUDE	   +=   -I./include/event/
+#INCLUDE	   +=   -I./include/precompile/
+INCLUDE	   +=   -I./submodule/spdlog/include/spdlog
+
+LIB			=	-lstdc++ -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
+LIB		   += 	-L./submodule/spdlog/build/ -lspdlog
+
+PCH_DIR		=	./include/precompile
+PCH_FLAG	=	-std=c++20 -O2
+PCH_SRC 	=	$(PCH_DIR)/precompile.hpp
+#PCH_HEADER	=
+
+SRC			=	$(wildcard src/*.cpp)
+OBJ			=	$(SRC:.cpp=.o)
+
+#all:		precompile bin
 all:		bin
 
 bin:		$(OBJ)
@@ -33,9 +45,14 @@ subfclean:
 		rm -rf submodule/spdlog/build
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 
+precompile:
+		@printf "[\033[;33m====\033[0m]% 72s\r" "precompile header" | tr " " "."
+		@g++ $(PCH_FLAG) $(PCH_SRC)
+		@printf "[\033[0;32m====\033[0m]% 72s\n" "precompile header" | tr " " "."
+
 .cpp.o:
 		@printf "[\033[;33m====\033[0m]% 72s\r" $< | tr " " "."
-		@g++ $(INCLUDE) $(FLAG) -c $< -o $@
+		@g++ $(FLAG) $(INCLUDE) -c $<  -o $@
 		@printf "[\033[0;32m====\033[0m]% 72s\n" $< | tr " " "."
 
 clean:
@@ -43,16 +60,19 @@ clean:
 		@rm -f $(OBJ)
 		@printf "[\033[0;31m####\033[0m]% 72s\n" $(OBJS) | tr " " "."
 
-fclean:	clean
+fclean:		clean
 		@printf "[\033[0;33m####\033[0m]% 72s\r" $(BIN) | tr " " "."
 		@rm -f $(BIN)
 		@printf "[\033[0;31m####\033[0m]% 72s\n" $(BIN) | tr " " "."
+		@printf "[\033[0;33m####\033[0m]% 72s\r" "precompiled header" | tr " " "."
+		@rm -f ./include/precompile.hpp.gch
+		@printf "[\033[0;31m####\033[0m]% 72s\n" "precompiled header" | tr " " "."
 
-re:		fclean all
+re:			fclean all
 
-lib:    $(OBJ)
+lib:		$(OBJ)
 		@g++ -shared  -fprofile-arcs -o $(OUTPUT) $(OBJ) $(LIB) 
 
-.PHONY: all clean fclean re
+.PHONY:		all clean fclean re
 
-.SUFFIXES: .cpp .o
+.SUFFIXES: .cpp .o .gch

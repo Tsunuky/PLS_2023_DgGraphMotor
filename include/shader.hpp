@@ -1,8 +1,9 @@
 #pragma once
 
-namespace dg {
-
+//#include <precompile.hpp>
 #include <string>
+
+namespace dg {
 
 class shader {
 public:

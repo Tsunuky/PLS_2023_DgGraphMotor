@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
     application doggo;
 
     dg::log::init();
-    doggo.run(argc, argv);
+    doggo.run(argc, argv, true);
     return 0;
 }
 

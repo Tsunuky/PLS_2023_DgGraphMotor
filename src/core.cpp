@@ -1,11 +1,15 @@
 #define GL_GLEXT_PROTOTYPES
 
-#include <functional>
-#include <iostream>
-#include <memory>
-#include "core.hpp"
-#include "window.hpp"
-#include "shader.hpp"
+#include <GL/glx.h>
+//#include <GL/glext.h>
+#include <GL/glut.h>
+
+#include <window.hpp>
+#include <shader.hpp>
+#include <core.hpp>
+#include <log.hpp>
+
+#include <eventApplication.hpp>
 
 dg::core *dgCorePtr;
 
@@ -34,7 +38,7 @@ float position[6] = { //test
      0.0f,  0.5f,
      0.5f,  -0.5f
 };
-
+ 
 void dg::core::display() {
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
 }
@@ -43,7 +47,7 @@ void dg::core::idleDisplay() {
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
 }
 
-void dg::window::start(int argc, char **argv, bool debug = false) {
+void dg::window_GL::start(int argc, char **argv, bool debug = false) {
     dg::core dgcore(debug);
 
     dgCorePtr = &dgcore;
@@ -59,8 +63,6 @@ void dg::core::glutAllInit(int argc, char **argv) {
     glDepthFunc(GL_LESS);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    if (_debug)
-        std::cout << glGetString(GL_VERSION) << std::endl;
 }
 
 static void render() {
@@ -83,8 +85,10 @@ void dg::core::initGlutCallback() {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);//test
     glBufferData(GL_ARRAY_BUFFER, 6 *sizeof(float), position, GL_STATIC_DRAW);//test
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);//test
-    dg::shader shad(vertexshader, fragmentshader);
 
+    dg::shader shad(vertexshader, fragmentshader);
+    if (_debug)
+        DG_CORE_INFO((char *)glGetString(GL_VERSION));
     glutDisplayFunc(render);
     glutIdleFunc(idleRender);
     //glutKeyboardFunc(KeysDown);
