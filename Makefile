@@ -9,8 +9,8 @@ INCLUDE	   +=   -I./include/event/
 #INCLUDE	   +=   -I./include/precompile/
 INCLUDE	   +=   -I./submodule/spdlog/include/spdlog
 
-LIB			=	-lstdc++ -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
-LIB		   += 	-L./submodule/spdlog/build/ -lspdlog
+LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
+LIB		   += 	-L./submodule/spdlog/build/
 
 PCH_DIR		=	./include/precompile
 PCH_FLAG	=	-std=c++20 -O2

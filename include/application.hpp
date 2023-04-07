@@ -1,35 +1,25 @@
 #pragma once
 
 #include <log.hpp>
-#include <window.hpp>
 
-class application: public dg::window_GL {
+#include <window_gl.hpp>
+
+class application {
 public:
     application() {
-        this->setOrtho();
+        _win.reset(dg::window_API::create(dg::window("doggo")));
+        _win->setEventCallback(std::bind_front(&application::onEvent, this));
     };
-    ~application() = default;
-//public:
-//    application *createApplication();
-public:
-    void run(int argc, char **argv, bool lgio = false) {
-        this->start(argc, argv, lgio);
-    };
-private:
-};
-
-/* a faire apres abstraction de window
-
-#include <core.hpp>
-
-class application: public dg::core {
-public:
-    application();
-    virtual ~application();
+    virtual ~application() {};
 public:
     application *createApplication();
 public:
-    void run();
+    void onEvent(dg::event &e) {
+
+    }
+    void run(int argc, char **argv, bool lgio = false) {
+        _win->run(argc, argv, lgio);
+    };
 private:
+    std::unique_ptr<dg::window_API> _win;
 };
-*/
