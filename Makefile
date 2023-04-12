@@ -7,7 +7,7 @@ FLAG		=	-std=c++20 -W -Wall -Wextra -g3
 INCLUDE		=	-I./include/ 
 INCLUDE	   +=   -I./include/event/
 #INCLUDE	   +=   -I./include/precompile/
-INCLUDE	   +=   -I./submodule/spdlog/include/spdlog
+INCLUDE	   +=   -I./submodule/spdlog/include/
 
 LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
 LIB		   += 	-L./submodule/spdlog/build/

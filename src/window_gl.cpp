@@ -4,6 +4,42 @@
 #include <log.hpp>
 #include <window_gl.hpp>
 
+void dg::setWinPointer(int id, dg::window_GL *pointer) {
+    if (id <= 0)
+        DG_CORE_FATAL("Error id given in setWinOinter");
+    _winUser.currentWin = pointer;
+    _winUser.id = id;
+}
+
+dg::window_GL *dg::getWinPointer(int id) {
+    if (id <= 0)
+        DG_CORE_FATAL("Error id given in getWinPointer");
+    if (_winUser.id > 0)
+        if (id != _winUser.id)
+            DG_CORE_FATAL("Error id concordances in getWinPointer");
+    return _winUser.currentWin;
+}
+
+void dg::setWinUserPointer(int id, void *pointer) {
+    if (id <= 0)
+        DG_CORE_FATAL("Error id given in setWinUserPointer");
+    if (_winUser.id > 0)
+        if (id != _winUser.id)
+            DG_CORE_FATAL("Error id concordances in setWinUserPointer");
+    _winUser.data = pointer;
+    _winUser.id = id;
+}
+
+void *dg::getUserWinPointer(int id) {
+    if (id <= 0)
+        DG_CORE_FATAL("Error id given in getWinUserPointer");
+    if (_winUser.id > 0)
+        if (id != _winUser.id)
+            DG_CORE_FATAL("Error id concordances in getWinUserPointer");
+    return _winUser.data;
+}
+
+
 dg::window_API *dg::window_API::create(const window &props) {
     return new dg::window_GL(props);
 }

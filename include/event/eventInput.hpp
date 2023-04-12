@@ -23,5 +23,3 @@ public:
 	EVENT_CLASS_CATEGORY(eventCategoryApplication)
 };
 }
-
-}

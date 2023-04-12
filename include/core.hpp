@@ -23,4 +23,12 @@ private:
     bool _debug;
 };
 
+struct corePointer {
+    core *pointer;
+};
+inline corePointer _coreUser{NULL};
+
+void setCorePointer(core *pointer);
+core *getCorePointer();
+
 }

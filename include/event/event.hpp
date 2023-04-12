@@ -8,10 +8,10 @@ namespace dg {
 
 enum class evenType {
     none = 0,
-    windowClose, windowResize, windowFocus, windowLostFocus, windowMoved,
-    appTick, appUpade, appRender,
-    KeyPressed, keyReleased,
-    mouseButtonPressed, mouseButtonReleased, mouseMoved, mouseScrolled,
+    windowClose, windowResize, windowFocus, windowLostFocus, windowMoved, windowId,
+    appTick, appUpdate, appRender,
+    KeyPressed, keyReleased, KeySpePressed, KeySpeReleased,
+    mouseButtonPressed, mouseButtonReleased, mouseMoved, mouseMovedClick, mouseScrolled,
 };
 
 enum eventCategory {
