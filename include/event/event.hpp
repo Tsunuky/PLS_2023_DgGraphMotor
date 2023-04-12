@@ -52,7 +52,7 @@ public:
 public:
 	template<typename T, typename F>
 	bool Dispatch(const F& func) {
-		if (_event.getEvenType() == T::GetStaticType()) {
+		if (_event.getEvenType() == T::getStaticType()) {
 			_event._handled |= func(static_cast<T&>(_event));
 			return true;
 		}

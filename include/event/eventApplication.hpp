@@ -18,6 +18,7 @@ public:
         //DG_ERROR("{0}" , fmt::ptr(&_winUser));
     }
 public:
+    // peux call userpointeru avec le getwindow pour moifier les value actuelle de la class window 
     std::string toString() const override {
         std::stringstream ss;
 
