@@ -2,9 +2,9 @@
 
 #define BIT(x) (1 << x)
 
-namespace dg {
-
 #include <string>
+
+namespace dg {
 
 enum class evenType {
     none = 0,
@@ -42,8 +42,8 @@ public:
     inline bool isInCategory(eventCategory category) {
         return getCategoryFlag() & category;
     }
-protected:
-    bool _handled = false;
+public:
+    bool handled = false;
 };
 
 class eventDispatcher {
@@ -53,7 +53,7 @@ public:
 	template<typename T, typename F>
 	bool Dispatch(const F& func) {
 		if (_event.getEvenType() == T::getStaticType()) {
-			_event._handled |= func(static_cast<T&>(_event));
+			_event.handled |= func(static_cast<T&>(_event));
 			return true;
 		}
 		return false;

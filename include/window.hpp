@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+#include <layerStack.hpp>
 #include <struct.hpp>
 #include <event.hpp>
 
@@ -26,9 +27,9 @@ public:
 public:
     virtual void setEventCallback(const eventCallbackFn &callback) = 0;
     virtual void setVsync(bool) = 0;
-    virtual void update() = 0;
+    virtual void onUpdate() = 0;
     virtual bool isVsync() const = 0;
-    virtual void run(int, char **, bool) = 0;
+    virtual void run(layerStack *stack, int, char **, bool) = 0;
 public:
     virtual u_int getsizeWidth() const = 0;
     virtual u_int getsizeHeight() const = 0;

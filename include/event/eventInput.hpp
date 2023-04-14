@@ -4,21 +4,21 @@
 
 namespace dg {
 
-class AppTickEvent : public event {
+class appTickEvent : public event {
 public:
-	AppTickEvent() = default;
+	appTickEvent() = default;
 	EVENT_CLASS_TYPE(appTick)
 	EVENT_CLASS_CATEGORY(eventCategoryApplication)
 };
-class AppUpdateEvent : public event {
+class appUpdateEvent : public event {
 public:
-	AppUpdateEvent() = default;
+	appUpdateEvent() = default;
 	EVENT_CLASS_TYPE(appUpdate)
 	EVENT_CLASS_CATEGORY(eventCategoryApplication)
 };
-class AppRenderEvent : public event {
+class appRenderEvent : public event {
 public:
-	AppRenderEvent() = default;
+	appRenderEvent() = default;
 	EVENT_CLASS_TYPE(appRender)
 	EVENT_CLASS_CATEGORY(eventCategoryApplication)
 };

@@ -1,4 +1,14 @@
-#include <application.hpp>
+#include <sandbox.hpp>
+
+int main(int argc, char **argv) {
+    application *app = createApplication();
+    dg::log::init();
+
+    app->run(argc, argv, true);
+    return 0;
+}
+
+/*#include <application.hpp>
 
 int main(int argc, char **argv) {
     application doggo;
@@ -6,7 +16,9 @@ int main(int argc, char **argv) {
     dg::log::init();
     doggo.run(argc, argv, true);
     return 0;
-}
+}*/
+
+
 
 /*
 

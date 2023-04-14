@@ -6,6 +6,7 @@
 #include <GL/freeglut_std.h>
 #include <GL/glut.h>
 
+#include <layerStack.hpp>
 #include <window_gl.hpp>
 #include <shader.hpp>
 #include <core.hpp>
@@ -46,10 +47,14 @@ float position[6] = { //test
  
 void dg::core::display() {
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
+    for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack())
+        layer->onUpdate();
 }
 
 void dg::core::idleDisplay() {
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
+    for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack())
+        layer->onUpdate();
 }
 
 void dg::setCorePointer(core *pointer) {
@@ -60,9 +65,10 @@ dg::core *dg::getCorePointer() {
     return dg::_coreUser.pointer;
 }
 
-void dg::window_GL::run(int argc, char **argv, bool debug = false) {
+void dg::window_GL::run(layerStack *stack, int argc, char **argv, bool debug = false) {
     dg::core dgcore(debug);
 
+    _layerStack = stack;
     dg::setCorePointer(&dgcore);
     //dgCorePtr = &dgcore;
     dg::getCorePointer()->glutAllInit(argc, argv);
@@ -181,16 +187,6 @@ static void keyboardSpe(int key, int x, int y) {
     dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
 }
 
-static void keyboardUp(unsigned char key, int x, int y) {
-    //DG_CORE_INFO("Up key: {0} pos (x:{1} y:{2})", key, x, y);
-    dg::keyReleased event(key, x, y);
-    dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
-
-    //a bouger
-    if (key == 27)
-        exit(0);
-}
-
 static void keyboardSpeUp(int key, int x, int y) {
     //DG_CORE_INFO("Up Spekey: {0} pos (x:{1} y:{2})", key, x, y);
     dg::KeySpeReleased event(key, x, y);
@@ -207,6 +203,16 @@ static void windowClose() {
     //DG_CORE_WARN("WindowClose");
     dg::windowCloseEvent event;
     dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
+}
+
+static void keyboardUp(unsigned char key, int x, int y) {
+    //DG_CORE_INFO("Up key: {0} pos (x:{1} y:{2})", key, x, y);
+    dg::keyReleased event(key, x, y);
+    dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
+
+    //a bouger
+    if (key == 27)
+        exit(0);
 }
 
 // a faire plus tard

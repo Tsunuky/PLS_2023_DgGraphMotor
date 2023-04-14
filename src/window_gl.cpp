@@ -54,8 +54,8 @@ void dg::window_GL::initWindow() {
     DG_CORE_INFO("Creating Window '{0}' width: {1}, height: {2}", _data.tittle, _data.width, _data.height);
 }
 
-void dg::window_GL::update() {
-
+void dg::window_GL::onUpdate() {
+    DG_CORE_FATAL("I'M HERE");
 }
 
 void dg::window_GL::setVsync(bool enable) {

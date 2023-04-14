@@ -26,12 +26,12 @@ public:
     void initWindow();
     void setOrtho();
 public:
-    void run(int, char **, bool) override;
+    void run(layerStack *stack, int, char **, bool) override;
     void clearColor(const dg::rgba &);
     void setOrtho(double, double, double, double);
     void scalePixel(float);
     void setVsync(bool enabled) override;
-    void update() override;
+    void onUpdate() override;
     void setEventCallback(const eventCallbackFn &callback) override {_data.eventCallback = callback;};
     void reshape(int height, int width) {_data.height = height; _data.width = width;};
 public:
@@ -39,8 +39,10 @@ public:
     inline u_int getsizeHeight() const override {return this->_data.height;};
     inline bool isVsync() const override {return this->_data.sync;};
     inline winData &getWinData() {return _data;};
+    inline dg::layerStack *getLayerStack() {return _layerStack;};
 private:
     winData _data; //peux faire un unique aui fait un suer pointeur
+    dg::layerStack *_layerStack;
 };
 
 struct winUser {
