@@ -12,7 +12,7 @@ public:
     }
 };
 
-class sandbox: public application {
+class sandbox: public dg::application {
 public:
     sandbox(): application() {
         pushLayer(new exampleLayer());
@@ -21,6 +21,6 @@ public:
     ~sandbox() = default;
 };
 
-inline application *createApplication() {
+inline dg::application *createApplication() {
     return new sandbox();
 }

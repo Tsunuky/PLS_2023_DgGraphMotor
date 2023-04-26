@@ -3,7 +3,6 @@
 #include <GL/freeglut.h>
 #include <log.hpp>
 
-
 #include <eventApplication.hpp>
 #include <window_gl.hpp>
 #include <layerStack.hpp>
@@ -11,7 +10,7 @@
 
 #define BIND_EVENT_FN(x) std::bind_front(&x, this)
 
-namespace {
+namespace dg {
 
 class application {
 public:
@@ -26,35 +25,12 @@ public:
 public:
     application *createApplication();
 public:
-    void onEvent(dg::event &e) {
-        dg::eventDispatcher dispatcher(e);
-
-        dispatcher.Dispatch<dg::windowCloseEvent>(BIND_EVENT_FN(application::onEventClose));
-        DG_CORE_TRACE("{0}",e.toString());
-        for (auto it = _layerStack.end(); it != _layerStack.begin();) {
-            if (e.handled)
-                break;
-            (*--it)->onEvent(e);
-        }
-    }
-    void run(int argc, char **argv, bool lgio = false) {
-        _win->run(&_layerStack, argc, argv, lgio);
-    };
-    bool onEventClose(dg::windowCloseEvent &e) {
-        (void)e;
-        DG_CORE_ERROR("call back event after dispatch");
-        //glutHideWindow();
-        return true;
-    }
-    void pushLayer(dg::layer *layer) {
-        _layerStack.pushLayer(layer);
-        layer->onAttach();
-    }
-    void pushOverlay(dg::layer *overlay) {
-        _layerStack.pushOverlay(overlay);
-        overlay->onAttach();
-    }
-
+    void onEvent(dg::event &e);
+    void run(int argc, char **argv, bool lgio = false);
+    bool onEventClose(dg::windowCloseEvent &e);
+    void pushLayer(dg::layer *layer);
+    void pushOverlay(dg::layer *overlay);
+public:
     inline static application &get() {return *_instance;}
     inline std::unique_ptr<dg::window_API> &getWindow() {return _win;};
 private:
@@ -62,5 +38,7 @@ private:
     dg::layerStack _layerStack;
     static application *_instance;
 };
-application *application::_instance = nullptr;
+
+inline application *application::_instance = nullptr;
+
 }

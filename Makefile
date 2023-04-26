@@ -12,7 +12,7 @@ INCLUDE	   +=   -I./submodule/spdlog/include/
 INCLUDE	   +=	-I./submodule/imgui/
 
 LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW -limGui #-lglfw
-LIB		   += 	-L./submodule/spdlog/build/ -L. 
+LIB		   += 	-L./submodule/spdlog/build/ -L./submodule/imgui/
 
 PCH_DIR		=	./include/precompile
 PCH_FLAG	=	-std=c++20 -O2
@@ -23,26 +23,6 @@ SRC			=	$(wildcard src/*.cpp) \
 				$(wildcard src/imGui/*.cpp)
 OBJ			=	$(SRC:.cpp=.o)
 
-###
-#imgui make a deplacer plus tard
-
-IMGUI_DIR	=	./submodule/imgui/
-
-IMGUI_FILE	=	$(wildcard $(IMGUI_DIR)/*.cpp)
-
-CXXFLAGS	=	-std=c++11 -I$(IMGUI_DIR)
-CXXFLAGS	+=	-g -Wall -Wformat
-
-LIBS		+= -lGL `pkg-config --static --libs glfw3`
-
-CXXFLAGS	+= `pkg-config --cflags glfw3`
-
-IMGUI_OBJS = $(addsuffix .o, $(basename $(notdir $(IMGUI_FILE))))
-
-%.o:$(IMGUI_DIR)/%.cpp
-	@g++ $(CXXFLAGS) -c -o $@ $<
-###
-
 #all:		precompile bin
 all:		bin
 
@@ -50,6 +30,8 @@ bin:		$(OBJ)
 		@printf "[\033[0;33m====\033[0m]% 72s\r" $(BIN) | tr " " "."
 		@g++ $(OBJ) -o $(BIN) $(LIBPATH) $(LIB)
 		@printf "[\033[0;32m====\033[0m]% 72s\n" $(BIN) | tr " " "."
+
+suball: sub_spdlog sub_imgui
 
 sub_spdlog:
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
@@ -60,17 +42,19 @@ sub_spdlog:
 
 sub_imgui: $(IMGUI_OBJS)
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
-		@ar -rc libimGui.a $(IMGUI_OBJS) 
+		make -C submodule/imgui -j
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 
 subclean:
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 		make -C submodule/spdlog/build -j clean
+		make -C submodule/imgui/ -j clean
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 
 subfclean:
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 		rm -rf submodule/spdlog/build
+		make -C submodule/imgui/ -j fclean
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 
 precompile:

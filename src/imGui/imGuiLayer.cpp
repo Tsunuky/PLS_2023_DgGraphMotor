@@ -24,16 +24,8 @@ void dg::imGuiLayer::onAttach() {
     
     ImGui::StyleColorsDark();
     ImGui_ImplGLUT_Init();
-    //if (!ImGui_ImplOpenGL2_Init())
-    //    DG_CORE_ERROR("ImGui opengl2 init fail");
     if (!ImGui_ImplOpenGL3_Init("#version 460"))
-        DG_CORE_ERROR("ImGui opengl2 init fail");
-    //    ImGui_ImplGLUT_InstallFuncs();
-    //    ImGui::CreateContext();
-    //    ImGui::StyleColorsDark();
-    //    ImGuiIO &io = ImGui::GetIO();
-
-    //    ImGui_ImplOpenGL3_Init("#version 450");
+        DG_CORE_ERROR("ImGui opengl3 init fail");
 }
 
 void dg::imGuiLayer::onDetach() {

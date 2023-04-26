@@ -1,7 +1,7 @@
 #include <sandbox.hpp>
 
 int main(int argc, char **argv) {
-    application *app = createApplication();
+    dg::application *app = createApplication();
 
     app->run(argc, argv, true);
     return 0;

@@ -6,7 +6,6 @@ class core {
 public:
     core(bool debug): _debug(debug) {};
     ~core() = default;
-    //virtual ~core();
 public:
     void glutAllInit(int argc, char **argv);
     void initGlutCallback();
