@@ -2,7 +2,6 @@
 
 int main(int argc, char **argv) {
     application *app = createApplication();
-    dg::log::init();
 
     app->run(argc, argv, true);
     return 0;

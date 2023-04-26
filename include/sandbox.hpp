@@ -5,7 +5,7 @@ public:
     exampleLayer(): layer("example") {}
 public:
     void onUpdate() override {
-        DG_INFO("exampleLayer: update");
+        //DG_INFO("exampleLayer: update");
     }
     void onEvent(dg::event &e) override {
         DG_TRACE(e.toString());
@@ -14,8 +14,9 @@ public:
 
 class sandbox: public application {
 public:
-    sandbox() {
+    sandbox(): application() {
         pushLayer(new exampleLayer());
+        pushOverlay(new dg::imGuiLayer());
     }
     ~sandbox() = default;
 };

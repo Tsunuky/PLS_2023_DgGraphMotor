@@ -19,6 +19,8 @@
 //dg::core *dgCorePtr;
 //dg::window_GL *currentWin;
 
+#include <imgui_impl_glut.hpp>
+
 std::string vertexshader =
     "#version 440 core\n"
     "#pragma debug(on)\n"
@@ -46,15 +48,21 @@ float position[6] = { //test
 };
  
 void dg::core::display() {
+    dg::shader shad(vertexshader, fragmentshader);
+    glUseProgram(shad.getShader());
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
     for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack())
         layer->onUpdate();
 }
 
 void dg::core::idleDisplay() {
+    dg::shader shad(vertexshader, fragmentshader);
+    glUseProgram(shad.getShader());
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
-    for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack())
+    for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack()) {
+        //DG_TRACE(layer->getName());
         layer->onUpdate();
+    }
 }
 
 void dg::setCorePointer(core *pointer) {
@@ -112,12 +120,14 @@ static void render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     dg::getCorePointer()->display();
     glutSwapBuffers();
+    glutPostRedisplay();
 }
 
 static void idleRender() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     dg::getCorePointer()->idleDisplay();
     glutSwapBuffers();
+    glutPostRedisplay();
 }
 
 //mettre en place pour la fenetre actuelle et decouper
@@ -149,6 +159,8 @@ static void moussePassivMove(int x, int y) {
 
 static void reshape(int width, int height) {
     //DG_CORE_INFO("reshape width: {0}, height: {1}", width, height);
+    dg::getWinPointer(glutGetWindow())->reshape(width, height); // a bouger
+    glutReshapeWindow(width, height);
     dg::windowResizEvent event(width, height);
     dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
     //currentWin->getWinData().eventCallback(event);
@@ -183,13 +195,13 @@ static void keyboard(unsigned char key, int x, int y) {
 
 static void keyboardSpe(int key, int x, int y) {
     //DG_CORE_INFO("Spekey: {0} pos (x:{1} y:{2})", key, x, y);
-    dg::KeySpePressed event(key, x, y);
+    dg::keySpePressed event(key, x, y);
     dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
 }
 
 static void keyboardSpeUp(int key, int x, int y) {
     //DG_CORE_INFO("Up Spekey: {0} pos (x:{1} y:{2})", key, x, y);
-    dg::KeySpeReleased event(key, x, y);
+    dg::keySpeReleased event(key, x, y);
     dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
 }
 
@@ -229,8 +241,6 @@ void dg::core::initGlutCallback() {
     glBufferData(GL_ARRAY_BUFFER, 6 *sizeof(float), position, GL_STATIC_DRAW);//test
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);//test
 
-    dg::shader shad(vertexshader, fragmentshader);
-
     glutDisplayFunc(render);
     glutIdleFunc(idleRender);
     glutKeyboardFunc(keyboard);
@@ -246,8 +256,6 @@ void dg::core::initGlutCallback() {
     glutCloseFunc(windowClose);
 
     glutJoystickFunc(joystick, 200);
-
-    glUseProgram(shad.getShader());
 }
 
 void dg::core::start() {

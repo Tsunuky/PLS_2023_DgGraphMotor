@@ -6,19 +6,42 @@ FLAG		=	-std=c++20 -W -Wall -Wextra -g3
 
 INCLUDE		=	-I./include/ 
 INCLUDE	   +=   -I./include/event/
+INCLUDE	   +=   -I./include/imGui/
 #INCLUDE	   +=   -I./include/precompile/
 INCLUDE	   +=   -I./submodule/spdlog/include/
+INCLUDE	   +=	-I./submodule/imgui/
 
-LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW #-lglfw
-LIB		   += 	-L./submodule/spdlog/build/
+LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW -limGui #-lglfw
+LIB		   += 	-L./submodule/spdlog/build/ -L. 
 
 PCH_DIR		=	./include/precompile
 PCH_FLAG	=	-std=c++20 -O2
 PCH_SRC 	=	$(PCH_DIR)/precompile.hpp
 #PCH_HEADER	=
 
-SRC			=	$(wildcard src/*.cpp)
+SRC			=	$(wildcard src/*.cpp) \
+				$(wildcard src/imGui/*.cpp)
 OBJ			=	$(SRC:.cpp=.o)
+
+###
+#imgui make a deplacer plus tard
+
+IMGUI_DIR	=	./submodule/imgui/
+
+IMGUI_FILE	=	$(wildcard $(IMGUI_DIR)/*.cpp)
+
+CXXFLAGS	=	-std=c++11 -I$(IMGUI_DIR)
+CXXFLAGS	+=	-g -Wall -Wformat
+
+LIBS		+= -lGL `pkg-config --static --libs glfw3`
+
+CXXFLAGS	+= `pkg-config --cflags glfw3`
+
+IMGUI_OBJS = $(addsuffix .o, $(basename $(notdir $(IMGUI_FILE))))
+
+%.o:$(IMGUI_DIR)/%.cpp
+	@g++ $(CXXFLAGS) -c -o $@ $<
+###
 
 #all:		precompile bin
 all:		bin
@@ -28,11 +51,16 @@ bin:		$(OBJ)
 		@g++ $(OBJ) -o $(BIN) $(LIBPATH) $(LIB)
 		@printf "[\033[0;32m====\033[0m]% 72s\n" $(BIN) | tr " " "."
 
-sub:
+sub_spdlog:
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 		mkdir -p submodule/spdlog/build
 		cmake -S submodule/spdlog -B submodule/spdlog/build
 		make -C submodule/spdlog/build -j
+		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
+
+sub_imgui: $(IMGUI_OBJS)
+		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
+		@ar -rc libimGui.a $(IMGUI_OBJS) 
 		@printf "[\033[0;33m====\033[0m]% 72s\r" | tr " " "."
 
 subclean:

@@ -29,9 +29,9 @@ private:
     int _y;
 };
 
-class KeySpePressed: public event {
+class keySpePressed: public event {
 public:
-    KeySpePressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    keySpePressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -39,7 +39,7 @@ public:
         ss << "Key special pressed "<< _key << " at x: " << _x << " y: " << _y;
         return ss.str();
     }
-   	EVENT_CLASS_TYPE(KeySpePressed)
+   	EVENT_CLASS_TYPE(keySpePressed)
 	EVENT_CLASS_CATEGORY(eventCategoryKeyboard) 
 public:
     inline u_int getKey() const {return _key;};
@@ -75,9 +75,9 @@ private:
     int _y;
 };
 
-class KeySpeReleased: public event {
+class keySpeReleased: public event {
 public:
-    KeySpeReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    keySpeReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -85,7 +85,7 @@ public:
         ss << "Key special released "<< _key << " at x: " << _x << " y: " << _y;
         return ss.str();
     }
-   	EVENT_CLASS_TYPE(KeySpeReleased)
+   	EVENT_CLASS_TYPE(keySpeReleased)
 	EVENT_CLASS_CATEGORY(eventCategoryKeyboard)
 public:
     inline u_int getKey() const {return _key;};
