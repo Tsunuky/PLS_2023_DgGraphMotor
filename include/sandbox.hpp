@@ -8,7 +8,8 @@ public:
         //DG_INFO("exampleLayer: update");
     }
     void onEvent(dg::event &e) override {
-        DG_TRACE(e.toString());
+        (void)e;
+        //DG_TRACE(e.toString());
     }
 };
 

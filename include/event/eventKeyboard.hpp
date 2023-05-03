@@ -3,12 +3,15 @@
 #include <sstream>
 #include <functional>
 #include <event.hpp>
+#include <input.hpp>
 
 namespace dg {
 
 class KeyPressed: public event {
 public:
-    KeyPressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    KeyPressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+        keyMap::setKeyInMap(key, true);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -31,7 +34,9 @@ private:
 
 class keySpePressed: public event {
 public:
-    keySpePressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    keySpePressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+        keyMap::setKeyInMap(256 + key, true);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -54,7 +59,9 @@ private:
 
 class keyReleased: public event {
 public:
-    keyReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    keyReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+        keyMap::setKeyInMap(key, false);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -77,7 +84,9 @@ private:
 
 class keySpeReleased: public event {
 public:
-    keySpeReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {};
+    keySpeReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+        keyMap::setKeyInMap(256 + key, true);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;

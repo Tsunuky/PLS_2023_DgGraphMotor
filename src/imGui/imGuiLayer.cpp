@@ -94,6 +94,7 @@ void dg::imGuiLayer::onEvent(event &event) {
     dispatcher.Dispatch<KeyPressed>(BIND_EVENT_FN(dg::imGuiLayer::onKeyPressed));
     dispatcher.Dispatch<keySpePressed>(BIND_EVENT_FN(dg::imGuiLayer::onKeySpePressed));
     dispatcher.Dispatch<keyReleased>(BIND_EVENT_FN(dg::imGuiLayer::onKeyReleased));
+    dispatcher.Dispatch<keySpeReleased>(BIND_EVENT_FN(dg::imGuiLayer::onKeySpeReleased));
     //dispatcher.Dispatch<onKeyType>(BIND_EVENT_FN(dg::imGuiLayer::onKeytype));
     dispatcher.Dispatch<windowResizEvent>(BIND_EVENT_FN(dg::imGuiLayer::onWindowRezise));
 }
@@ -298,7 +299,7 @@ bool dg::imGuiLayer::onKeyPressed(KeyPressed &e) {
 }
 
 bool dg::imGuiLayer::onKeySpePressed(keySpePressed &e) {
-    imGuiKeyEvent(glutKeyToImGuiKey(e.getKey()), true, e.getKey());
+    imGuiKeyEvent(glutKeyToImGuiKey(e.getKey() + 256), true, e.getKey());
     updateKeyModif();
     return false;
 }
@@ -310,7 +311,7 @@ bool dg::imGuiLayer::onKeyReleased(keyReleased &e) {
 }
 
 bool dg::imGuiLayer::onKeySpeReleased(keySpeReleased &e) {
-    imGuiKeyEvent(glutKeyToImGuiKey(e.getKey()), false, e.getKey());
+    imGuiKeyEvent(glutKeyToImGuiKey(e.getKey() + 256), false, e.getKey());
     updateKeyModif();
     return false;
 }

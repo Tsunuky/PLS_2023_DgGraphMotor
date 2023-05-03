@@ -15,7 +15,8 @@
 #include <eventApplication.hpp>
 #include <eventInput.hpp>
 #include <eventKeyboard.hpp>
-#include <eventMoue.hpp>
+#include <eventMouse.hpp>
+#include <inputLinux.hpp>
 //dg::core *dgCorePtr;
 //dg::window_GL *currentWin;
 
@@ -106,6 +107,11 @@ void dg::core::checkDevice() {
     DG_CORE_WARN("check button joystick {0}", glutDeviceGet(GLUT_JOYSTICK_BUTTONS));
 }
 
+void init() {
+    dg::keyMap::initKeymap();
+    dg::buttonMap::initButtonmap();
+}
+
 void dg::core::glutAllInit(int argc, char **argv) {
     glutInit(&argc, argv);
     glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
@@ -114,6 +120,7 @@ void dg::core::glutAllInit(int argc, char **argv) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     checkDevice();
+    init();
 }
 
 static void render() {
@@ -136,6 +143,8 @@ static void mousseClick(int button, int state, int x, int y) {
     if ((button == 3 || button == 4) && state == 1) {
         dg::mouseScrolled event(button, x, y);
         dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);
+    } else if ((button == 3 || button == 4) && state == 0) {
+        dg::buttonMap::setButtonInMap(button, false);
     } else if (state == 1) {
         dg::mouseButtonPressed event(button, x, y);
         dg::getWinPointer(glutGetWindow())->getWinData().eventCallback(event);

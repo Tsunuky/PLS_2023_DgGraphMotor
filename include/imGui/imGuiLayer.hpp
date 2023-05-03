@@ -3,7 +3,7 @@
 #include <event/eventApplication.hpp>
 #include <event/eventKeyboard.hpp>
 #include <application.hpp>
-#include <eventMoue.hpp>
+#include <eventMouse.hpp>
 #include <layer.hpp>
 
 namespace dg {

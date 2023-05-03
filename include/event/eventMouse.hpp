@@ -1,5 +1,6 @@
 #pragma once
 
+#include <input.hpp>
 #include <event.hpp>
 
 namespace dg {
@@ -48,7 +49,9 @@ private:
 
 class mouseScrolled: public event {
 public:
-    mouseScrolled(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {};
+    mouseScrolled(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {
+        buttonMap::setButtonInMap(button, true);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -71,7 +74,9 @@ private:
 
 class mouseButtonPressed: public event {
 public:
-    mouseButtonPressed(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {};
+    mouseButtonPressed(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {
+        buttonMap::setButtonInMap(button, true);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
@@ -94,7 +99,9 @@ private:
 
 class mouseButtonReleased: public event {
 public:
-    mouseButtonReleased(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {};
+    mouseButtonReleased(int button, int x, int y): _userFunc(NULL), _button(button), _x(x), _y(y) {
+        buttonMap::setButtonInMap(button, false);
+    };
 public:
     std::string toString() const override {
         std::stringstream ss;
