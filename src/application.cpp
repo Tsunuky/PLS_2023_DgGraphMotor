@@ -4,7 +4,7 @@ void dg::application::onEvent(dg::event &e) {
     dg::eventDispatcher dispatcher(e);
 
     dispatcher.Dispatch<dg::windowCloseEvent>(BIND_EVENT_FN(application::onEventClose));
-    DG_CORE_TRACE("{0}",e.toString());
+    //DG_CORE_TRACE("{0}",e.toString());
     for (auto it = _layerStack.end(); it != _layerStack.begin();) {
         if (e.handled)
             break;

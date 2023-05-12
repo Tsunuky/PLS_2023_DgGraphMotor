@@ -9,6 +9,9 @@ class input {
 public:
     inline static bool istKeyPress(int keycode) {return _instance->isKeyPressImpl(keycode);}
     inline static bool isButtonPress(int button) {return _instance->isButtonPressImpl(button);};
+    inline static bool whileKeyPress(int keycode) {return _instance->whileKeyPressImpl(keycode);}
+    inline static bool whileButtonPress(int button) {return _instance->whileButtonPressImpl(button);};
+
 
     inline static std::pair<int, int> getMousePos() {return _instance->getMousePosImpl();};
     inline static int getMouseX() {return _instance->getMouseXImpl();};
@@ -16,7 +19,9 @@ public:
 protected:
     virtual bool isKeyPressImpl(int keycode)  = 0;
     virtual bool isButtonPressImpl(int button) = 0;
-    
+    virtual bool whileKeyPressImpl(int keycode) = 0;
+    virtual bool whileButtonPressImpl(int button) = 0;
+
     virtual std::pair<int, int> getMousePosImpl() = 0;
     virtual int getMouseXImpl() = 0;
     virtual int getMouseYImpl() = 0;
@@ -27,23 +32,23 @@ private:
 //peux transformer les namespace en class a voir
 
 namespace keyMap {
-
-inline std::unordered_map<int, bool> _keymap;
+//premier bool donne si key est presse deuxieme dit si on peut la repeter
+inline std::unordered_map<int, std::pair<bool, bool>> _keymap;
 //mettre un array de 512 en brut
 
 void initKeymap();
-bool getKeyInMap(int keycode);
-void setKeyInMap(int keycode, bool status);
+std::pair<bool, bool> getKeyInMap(int keycode);
+void setKeyInMap(int keycode, bool status, bool repeat = false);
 
 }
 
 namespace buttonMap {
 
-inline std::unordered_map<int, bool> _buttonmap;
+inline std::unordered_map<int, std::pair<bool, bool>> _buttonmap;
 
 void initButtonmap();
-bool getButtonInMap(int button);
-void setButtonInMap(int button, bool status);
+std::pair<bool, bool> getButtonInMap(int button);
+void setButtonInMap(int button, bool status, bool repeat = false);
 
 }
 

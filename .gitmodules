@@ -4,3 +4,7 @@
 [submodule "submodule/imgui"]
 	path = submodule/imgui
 	url = git@github.com:ocornut/imgui.git
+	branch = docking
+[submodule "submodule/glm"]
+	path = submodule/glm
+	url = git@github.com:g-truc/glm.git

@@ -20,6 +20,9 @@
 //dg::core *dgCorePtr;
 //dg::window_GL *currentWin;
 
+// a regrader pour se faire une lib math
+//#include <emmintrin.h>
+
 #include <imgui_impl_glut.hpp>
 
 std::string vertexshader =
@@ -48,17 +51,23 @@ float position[6] = { //test
      0.5f,  -0.5f
 };
  
+
+ // shader lek memory ne pas creer a chaque fois ou trouver comment les free
+ //
+
 void dg::core::display() {
-    dg::shader shad(vertexshader, fragmentshader);
-    glUseProgram(shad.getShader());
+    //dg::shader shad(vertexshader, fragmentshader);
+    //glUseProgram(shad.getShader());
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
     for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack())
         layer->onUpdate();
+    DG_TRACE(input::istKeyPress('a'));
+    DG_CORE_TRACE(input::whileKeyPress('q'));
 }
 
 void dg::core::idleDisplay() {
-    dg::shader shad(vertexshader, fragmentshader);
-    glUseProgram(shad.getShader());
+    //dg::shader shad(vertexshader, fragmentshader);
+    //glUseProgram(shad.getShader());
     glDrawArrays(GL_TRIANGLES, 0, 3);//test
     for (layer *layer: *getWinPointer(glutGetWindow())->getLayerStack()) {
         //DG_TRACE(layer->getName());
@@ -119,6 +128,7 @@ void dg::core::glutAllInit(int argc, char **argv) {
     glDepthFunc(GL_LESS);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glEnable (GL_DEBUG_OUTPUT);
     checkDevice();
     init();
 }
@@ -241,6 +251,11 @@ static void joystick(u_int ButtonMask, int x, int y, int z) {
     DG_CORE_INFO("joystick: mask {0} x {1} y {2} z {3}", ButtonMask, x, y, z);
 }
 
+void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+    (void)source; (void)id; (void)length; (void)userParam;
+    DG_CORE_ERROR("GL CALLBACK: {0} type = 0x{1}, severity = 0x{2}, message = {3}\n", (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "") , type, severity, message);
+}
+
 void dg::core::initGlutCallback() {
     u_int buffer; //test
 
@@ -263,6 +278,7 @@ void dg::core::initGlutCallback() {
     glutPassiveMotionFunc(moussePassivMove);
     glutWindowStatusFunc(windowStatus);
     glutCloseFunc(windowClose);
+    glDebugMessageCallback(MessageCallback, 0);
 
     glutJoystickFunc(joystick, 200);
 }

@@ -1,6 +1,8 @@
 #include <GL/freeglut.h>
 #include <cstdio>
 
+#include <log.hpp>
+
 #include <inputLinux.hpp>
 
 namespace dg {
@@ -8,11 +10,29 @@ namespace dg {
 input *input::_instance = new linuxInput();
 
 bool linuxInput::isKeyPressImpl(int keycode) {
-    return keyMap::getKeyInMap(keycode);
+    std::pair<bool, bool> state = keyMap::getKeyInMap(keycode);
+    
+    if (state.second == true)
+        return false;
+    keyMap::setKeyInMap(keycode, state.first, true);
+    return state.first;
 }
 
-bool linuxInput::isButtonPressImpl(int button) {
-    return buttonMap::getButtonInMap(button);
+bool linuxInput::whileKeyPressImpl(int keycode) {
+    return keyMap::getKeyInMap(keycode).first;
+}
+
+bool linuxInput::isButtonPressImpl(int keycode) {
+    std::pair<bool, bool> state = buttonMap::getButtonInMap(keycode);
+    
+    if (state.second == true)
+        return false;
+    buttonMap::setButtonInMap(keycode, state.first, true);
+    return state.first;
+}
+
+bool linuxInput::whileButtonPressImpl(int button) {
+    return buttonMap::getButtonInMap(button).first;
 }
 
 std::pair<int, int> linuxInput::getMousePosImpl() {
@@ -29,54 +49,55 @@ int linuxInput::getMouseYImpl() {
 
 void keyMap::initKeymap() {
     for (size_t i = 0; i != 256; i++) {
-        _keymap.emplace(i, false);
+        _keymap.emplace(i, std::make_pair(false, false));
     }
-    _keymap.emplace(256 + GLUT_KEY_PAGE_DOWN, false);
-    _keymap.emplace(256 + GLUT_KEY_PAGE_UP, false);
-    _keymap.emplace(256 + GLUT_KEY_INSERT, false);
-    _keymap.emplace(256 + GLUT_KEY_RIGHT, false);
-    _keymap.emplace(256 + GLUT_KEY_DOWN, false);
-    _keymap.emplace(256 + GLUT_KEY_HOME, false);
-    _keymap.emplace(256 + GLUT_KEY_LEFT, false);
-    _keymap.emplace(256 + GLUT_KEY_END, false);
-    _keymap.emplace(256 + GLUT_KEY_UP, false);
+    _keymap.emplace(256 + GLUT_KEY_PAGE_DOWN, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_PAGE_UP, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_INSERT, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_RIGHT, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_DOWN, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_HOME, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_LEFT, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_END, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_UP, std::make_pair(false, false));
 
-
-    _keymap.emplace(256 + GLUT_KEY_F1, false);
-    _keymap.emplace(256 + GLUT_KEY_F2, false);
-    _keymap.emplace(256 + GLUT_KEY_F3, false);
-    _keymap.emplace(256 + GLUT_KEY_F4, false);
-    _keymap.emplace(256 + GLUT_KEY_F5, false);
-    _keymap.emplace(256 + GLUT_KEY_F6, false);
-    _keymap.emplace(256 + GLUT_KEY_F7, false);
-    _keymap.emplace(256 + GLUT_KEY_F8, false);
-    _keymap.emplace(256 + GLUT_KEY_F9, false);
-    _keymap.emplace(256 + GLUT_KEY_F10, false);
-    _keymap.emplace(256 + GLUT_KEY_F11, false);
-    _keymap.emplace(256 + GLUT_KEY_F12, false);
+    _keymap.emplace(256 + GLUT_KEY_F1, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F2, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F3, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F4, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F5, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F6, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F7, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F8, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F9, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F10, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F11, std::make_pair(false, false));
+    _keymap.emplace(256 + GLUT_KEY_F12, std::make_pair(false, false));
 }
 
-bool keyMap::getKeyInMap(int keycode) {
+std::pair<bool, bool> keyMap::getKeyInMap(int keycode) {
     return _keymap.at(keycode);
 }
 
-void keyMap::setKeyInMap(int keycode, bool status) {
-    _keymap[keycode] = status;
+void keyMap::setKeyInMap(int keycode, bool status, bool repeat) {
+    _keymap[keycode].first = status;
+    _keymap[keycode].second = repeat;
 }
 
 //faire par rapport au button get par glut
 void buttonMap::initButtonmap() {
     for (size_t i = 0; i != 12; i++) {
-        _buttonmap.emplace(i, false);
+        _buttonmap.emplace(i, std::make_pair(false, false));
     }
 }
 
-bool buttonMap::getButtonInMap(int button) {
+std::pair<bool, bool> buttonMap::getButtonInMap(int button) {
     return _buttonmap.at(button);
 }
 
-void buttonMap::setButtonInMap(int button, bool status) {
-    _buttonmap[button] = status;
+void buttonMap::setButtonInMap(int button, bool status, bool repeat) {
+    _buttonmap[button].first = status;
+    _buttonmap[button].second = repeat;
 }
 
 void mouseDataPos::initMousePos() {

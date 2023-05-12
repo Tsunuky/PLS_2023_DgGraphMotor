@@ -5,7 +5,7 @@
 #include <imgui_impl_glut.hpp>
 #include <imgui_impl_opengl3.hpp>
 #include <GL/glext.h>
-
+#include <imgui_internal.h>
 #include <imgui.h>
 
 static bool show_demo_window = true;
@@ -21,7 +21,9 @@ void dg::imGuiLayer::onAttach() {
     //DG_CORE_ERROR("===> {0}", fmt::ptr(con));
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
     ImGui::StyleColorsDark();
     ImGui_ImplGLUT_Init();
     if (!ImGui_ImplOpenGL3_Init("#version 460"))
@@ -36,6 +38,7 @@ void dg::imGuiLayer::onDetach() {
 }
 
 void dg::imGuiLayer::onUpdate() {
+
     //DG_TRACE("ImGuiOverlay update");
     glUseProgram(0);
     //ImGuiContext *con = ImGui::GetCurrentContext();
@@ -81,6 +84,7 @@ void dg::imGuiLayer::onUpdate() {
     ImGui::Render();
     //ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 void dg::imGuiLayer::onEvent(event &event) {
