@@ -12,7 +12,7 @@ static bool show_demo_window = true;
 static bool show_another_window = true;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-//juste a faire mon prorpe get time et on glut ingut peux degager
+//juste a faire mon prorpe get time et glut ingut peux degager
 
 void dg::imGuiLayer::onAttach() {
     IMGUI_CHECKVERSION();
@@ -84,7 +84,10 @@ void dg::imGuiLayer::onUpdate() {
     ImGui::Render();
     //ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+    }
 }
 
 void dg::imGuiLayer::onEvent(event &event) {
