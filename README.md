@@ -25,7 +25,7 @@ Carte graphique : Compatible avec OpenGL 3.3 ou supérieur
 Installation
 Clonez ce dépôt sur votre machine locale.
 ```
-git submodule update --init --recursive remote
+git submodule update --init --recursive --remote
 ```
 ```
 make suball
