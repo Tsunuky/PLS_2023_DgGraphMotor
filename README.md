@@ -27,6 +27,12 @@ Clonez ce dépôt sur votre machine locale.
 ```
 git submodule update --init --recursive remote
 ```
+```
+make suball
+```
+```
+make
+```
 ---
 
 Contribuer
