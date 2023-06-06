@@ -1,14 +1,14 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
 #include <window.hpp>
 
 #include <log.hpp>
 namespace dg {
-
 class window_GL: public window_API {
 public:
     struct winData {
-        std::string tittle;
+        std::string title;
         u_int width;
         u_int height;
         bool sync;
@@ -17,19 +17,18 @@ public:
     };
 public:
     window_GL(const window &props) {
-        _data.tittle = props._name;
+        _data.title = props._name;
         _data.width = props._sw;
         _data.height = props._sh;
         _data.sync = false;
+        initWindow();
     };
     ~window_GL() = default;
 public:
     void initWindow();
     void setOrtho();
 public:
-    void run(layerStack *stack, int, char **, bool) override;
     void clearColor(const dg::rgba &);
-    void setOrtho(double, double, double, double);
     void scalePixel(float);
     void setVsync(bool enabled) override;
     void onUpdate() override;
@@ -41,11 +40,12 @@ public:
     inline bool isVsync() const override {return this->_data.sync;};
     inline winData &getWinData() {return _data;};
     inline dg::layerStack *getLayerStack() {return _layerStack;};
-
-    inline void pd() const {DG_CORE_FATAL("Thomas");};
 private:
-    winData _data; //peux faire un unique aui fait un suer pointeur
+    void setCallback();
+private:
     dg::layerStack *_layerStack;
+    GLFWwindow* _window;
+    winData _data; //peux faire un unique aui fait un suer pointeur
 };
 
 struct winUser {

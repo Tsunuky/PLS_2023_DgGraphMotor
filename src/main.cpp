@@ -1,9 +1,12 @@
 #include <sandbox.hpp>
 
 int main(int argc, char **argv) {
+    (void)argc; (void)argv;
     dg::application *app = createApplication();
 
-    app->run(argc, argv, true);
+    app->run();
+
+    delete app;
     return 0;
 }
 

@@ -1,4 +1,3 @@
-#include <GL/freeglut.h>
 #include <cstdio>
 
 #include <log.hpp>
@@ -51,7 +50,7 @@ void keyMap::initKeymap() {
     for (size_t i = 0; i != 256; i++) {
         _keymap.emplace(i, std::make_pair(false, false));
     }
-    _keymap.emplace(256 + GLUT_KEY_PAGE_DOWN, std::make_pair(false, false));
+    /*_keymap.emplace(256 + GLUT_KEY_PAGE_DOWN, std::make_pair(false, false));
     _keymap.emplace(256 + GLUT_KEY_PAGE_UP, std::make_pair(false, false));
     _keymap.emplace(256 + GLUT_KEY_INSERT, std::make_pair(false, false));
     _keymap.emplace(256 + GLUT_KEY_RIGHT, std::make_pair(false, false));
@@ -73,6 +72,7 @@ void keyMap::initKeymap() {
     _keymap.emplace(256 + GLUT_KEY_F10, std::make_pair(false, false));
     _keymap.emplace(256 + GLUT_KEY_F11, std::make_pair(false, false));
     _keymap.emplace(256 + GLUT_KEY_F12, std::make_pair(false, false));
+    */
 }
 
 std::pair<bool, bool> keyMap::getKeyInMap(int keycode) {

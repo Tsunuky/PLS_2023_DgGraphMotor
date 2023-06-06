@@ -34,3 +34,6 @@ private:
 #define DG_TRACE(...)        dg::log::getClientLogger()->trace(__VA_ARGS__)
 #define DG_WARN(...)         dg::log::getClientLogger()->warn(__VA_ARGS__)
 #define DG_INFO(...)         dg::log::getClientLogger()->info(__VA_ARGS__)
+
+#define DG_ASSERT(x, ...) {if (!x) {DG_FATAL("assertion failed, {0}", __VA_ARGS__);}}
+#define DG_CORE_ASSERT(x, ...) {if (!x) {DG_CORE_FATAL("assertion failed, {0}", __VA_ARGS__);}}

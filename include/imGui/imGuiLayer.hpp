@@ -21,13 +21,11 @@ private:
     bool onMouseButtonReleased(mouseButtonReleased &e);
     bool onMouseScrolled(mouseScrolled &e);
     bool onMouseMove(mouseMoved &e);
-    bool onMouseMovedClick(mouseMovedClick &e);
     bool onKeyPressed(KeyPressed &e);
-    bool onKeySpePressed(keySpePressed &e);
     bool onKeyReleased(keyReleased &e);
-    bool onKeySpeReleased(keySpeReleased &e);
     //bool onKeyType(keyType &e);
     bool onWindowRezise(windowResizEvent &e);
 private:
+    float _time = 0.0f;
 };
 }

@@ -12,7 +12,7 @@ INCLUDE	   +=   -I./submodule/spdlog/include/
 INCLUDE	   +=	-I./submodule/imgui/
 INCLUDE	   +=	-I./submodule/glm/
 
-LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lglut -lGL -lGLU -lGLEW -limGui #-lglfw
+LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lGL -lGLU -lGLEW -limGui -lglfw
 LIB		   += 	-L./submodule/spdlog/build/ -L./submodule/
 
 PCH_DIR		=	./include/precompile

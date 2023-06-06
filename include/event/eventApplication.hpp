@@ -105,5 +105,16 @@ private:
     int _id;
 };
 
+class windowMoved: public event {
+public:
+    windowMoved(int x, int y): _userFunc(NULL), _x(x), _y(y) {}
+public:
+    EVENT_CLASS_TYPE(windowMoved)
+    EVENT_CLASS_CATEGORY(eventCategoryApplication)
+private:
+    std::function<void(void *)> _userFunc;
+    int _x;
+    int _y;
+};
 
 }
