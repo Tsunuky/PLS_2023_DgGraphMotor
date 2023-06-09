@@ -96,14 +96,15 @@ void dg::imGuiLayer::onUpdate() {
 void dg::imGuiLayer::onEvent(event &event) {
     dg::eventDispatcher dispatcher(event);
 
-    dispatcher.Dispatch<mouseButtonPressed>(BIND_EVENT_FN(dg::imGuiLayer::onMouseButtonPressed));
+
     dispatcher.Dispatch<mouseButtonReleased>(BIND_EVENT_FN(dg::imGuiLayer::onMouseButtonReleased));
-    dispatcher.Dispatch<mouseScrolled>(BIND_EVENT_FN(dg::imGuiLayer::onMouseScrolled));
-    dispatcher.Dispatch<mouseMoved>(BIND_EVENT_FN(dg::imGuiLayer::onMouseMove));
-    dispatcher.Dispatch<KeyPressed>(BIND_EVENT_FN(dg::imGuiLayer::onKeyPressed));
-    dispatcher.Dispatch<keyReleased>(BIND_EVENT_FN(dg::imGuiLayer::onKeyReleased));
-    //dispatcher.Dispatch<onKeyType>(BIND_EVENT_FN(dg::imGuiLayer::onKeytype));
+    dispatcher.Dispatch<mouseButtonPressed>(BIND_EVENT_FN(dg::imGuiLayer::onMouseButtonPressed));
     dispatcher.Dispatch<windowResizEvent>(BIND_EVENT_FN(dg::imGuiLayer::onWindowRezise));
+    dispatcher.Dispatch<mouseScrolled>(BIND_EVENT_FN(dg::imGuiLayer::onMouseScrolled));
+    dispatcher.Dispatch<keyReleased>(BIND_EVENT_FN(dg::imGuiLayer::onKeyReleased));
+    dispatcher.Dispatch<KeyPressed>(BIND_EVENT_FN(dg::imGuiLayer::onKeyPressed));
+    dispatcher.Dispatch<mouseMoved>(BIND_EVENT_FN(dg::imGuiLayer::onMouseMove));
+    dispatcher.Dispatch<keyType>(BIND_EVENT_FN(dg::imGuiLayer::onKeyType));
 }
 
 static ImGuiKey glgwtKeyToImGuiKey(int key) {
@@ -217,18 +218,22 @@ static ImGuiKey glgwtKeyToImGuiKey(int key) {
     }
 }
 
-static void updateKeyModif() {
-    ImGuiIO& io = ImGui::GetIO();
-
-    // get window a mettre
-    //io.AddKeyEvent(ImGuiMod_Ctrl,  (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
-    //io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)   == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)   == GLFW_PRESS));
-    //io.AddKeyEvent(ImGuiMod_Alt,   (glfwGetKey(window, GLFW_KEY_LEFT_ALT)     == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT)     == GLFW_PRESS));
-    //io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER)   == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER)   == GLFW_PRESS));
+/*
+static ImGuiContext* imguiBackendData()
+{
+    return ImGui::GetCurrentContext() ? (ImGuiContext*)ImGui::GetIO().BackendPlatformUserData : nullptr;
 }
 
+static bool ImGui_ImplGlfw_ShouldChainCallback(GLFWwindow* window)
+{
+    (void)window;
+    //ImGuiContext* bd = imguiBackendData();
+    //return bd->CallbacksChainForAllWindows ? true : (window == bd->Window);
+    return false;
+}*/
+
 bool dg::imGuiLayer::onMouseButtonPressed(mouseButtonPressed &e) {
-    ImGuiIO io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     int button = e.getButton();
     
     //io.AddMousePosEvent(e.getX(), e.getY());
@@ -246,14 +251,14 @@ bool dg::imGuiLayer::onMouseButtonReleased(mouseButtonReleased &e) {
 }
 
 bool dg::imGuiLayer::onMouseScrolled(mouseScrolled &e) {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
 
     io.AddMouseWheelEvent(e.getX(), e.getY());
     return false;
 }
 
 static void imGuiKeyEvent(ImGuiKey key, bool down, int native_keycode) {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
 
     io.AddKeyEvent(key, down);
     io.SetKeyEventNativeData(key, native_keycode, -1);
@@ -261,36 +266,43 @@ static void imGuiKeyEvent(ImGuiKey key, bool down, int native_keycode) {
 
 
 bool dg::imGuiLayer::onMouseMove(mouseMoved &e) {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
 
     io.AddMousePosEvent(e.getX(), e.getY());
     return false;
 }
 
 bool dg::imGuiLayer::onKeyPressed(KeyPressed &e) {
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
 
     if (e.getKey() >= 32)
         io.AddInputCharacter((unsigned int)e.getKey());
-    imGuiKeyEvent(glgwtKeyToImGuiKey(e.getKey()), true, e.getKey());
-    updateKeyModif();
+    imGuiKeyEvent(glgwtKeyToImGuiKey(e.getKey()), true, e.getNativeCode());
+
+    io.AddKeyEvent(ImGuiMod_Ctrl, (e.getKey() == GLFW_KEY_LEFT_CONTROL || e.getKey() == GLFW_KEY_RIGHT_CONTROL) ? GLFW_TRUE : GLFW_FALSE);
+    io.AddKeyEvent(ImGuiMod_Shift, (e.getKey() ==  GLFW_KEY_LEFT_SHIFT || e.getKey() == GLFW_KEY_RIGHT_SHIFT) ? GLFW_TRUE : GLFW_FALSE);
+    io.AddKeyEvent(ImGuiMod_Super, (e.getKey() == GLFW_KEY_LEFT_SUPER || e.getKey() == GLFW_KEY_RIGHT_SUPER) ? GLFW_TRUE : GLFW_FALSE);
+    io.AddKeyEvent(ImGuiMod_Alt,  (e.getKey() == GLFW_KEY_LEFT_ALT || e.getKey() == GLFW_KEY_RIGHT_ALT) ? GLFW_TRUE : GLFW_FALSE);
+
     return false;
 }
 
 bool dg::imGuiLayer::onKeyReleased(keyReleased &e) {
-    imGuiKeyEvent(glgwtKeyToImGuiKey(e.getKey()), false, e.getKey());
-    updateKeyModif();
+    imGuiKeyEvent(glgwtKeyToImGuiKey(e.getKey()), false, e.getNativeCode());
     return false;
 }
 
-//bool dg::imGuiLayer::onKeyType(keytype &e) {
-//
-//}
+bool dg::imGuiLayer::onKeyType(keyType &e) {
+    ImGuiIO &io = ImGui::GetIO();
+    io.AddInputCharacter(e.getKeyType());
+    return false;
+}
 
 bool dg::imGuiLayer::onWindowRezise(windowResizEvent &e) {
     ImGuiIO& io = ImGui::GetIO();
 
     io.DisplaySize = ImVec2(e.getWidth(), e.getHeight());
+    glViewport(0, 0, e.getWidth(), e.getHeight());
     DG_CORE_ERROR("resize imGui {0} {1}", e.getWidth(), e.getHeight());
     return false;
 }

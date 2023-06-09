@@ -48,16 +48,4 @@ private:
     winData _data; //peux faire un unique aui fait un suer pointeur
 };
 
-struct winUser {
-    window_GL *currentWin;
-    void *data;
-    int id;
-};
-
-inline winUser _winUser{NULL, NULL, 0};
-
-void setWinUserPointer(int id, void *pointer);
-void setWinPointer(int id, dg::window_GL *pointer);
-dg::window_GL *getWinPointer(int id);
-void *getUserWinPointer(int id);
 }

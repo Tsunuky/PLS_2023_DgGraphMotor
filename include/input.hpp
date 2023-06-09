@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <utility>
 
+#include <keyCode.hpp>
+
 namespace dg {
 
 class input {
@@ -34,7 +36,7 @@ private:
 namespace keyMap {
 //premier bool donne si key est presse deuxieme dit si on peut la repeter
 inline std::unordered_map<int, std::pair<bool, bool>> _keymap;
-//mettre un array de 512 en brut
+//mettre un array de DG_KEY_LAST en brut
 
 void initKeymap();
 std::pair<bool, bool> getKeyInMap(int keycode);

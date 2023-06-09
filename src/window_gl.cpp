@@ -10,43 +10,6 @@
 #include <eventMouse.hpp>
 #include <inputLinux.hpp>
 
-static int _id = 0;
-
-void dg::setWinPointer(int id, dg::window_GL *pointer) {
-    if (id <= 0)
-        DG_CORE_FATAL("Error id given in setWinOinter");
-    _winUser.currentWin = pointer;
-    _id = id;
-}
-
-dg::window_GL *dg::getWinPointer(int id) {
-    if (id <= 0)
-        DG_CORE_FATAL("Error id given in getWinPointer");
-    if (_winUser.id > 0)
-        if (id != _winUser.id)
-            DG_CORE_FATAL("Error id concordances in getWinPointer");
-    return _winUser.currentWin;
-}
-
-void dg::setWinUserPointer(int id, void *pointer) {
-    if (id <= 0)
-        DG_CORE_FATAL("Error id given in setWinUserPointer");
-    if (_winUser.id > 0)
-        if (id != _winUser.id)
-            DG_CORE_FATAL("Error id concordances in setWinUserPointer");
-    _winUser.data = pointer;
-    _winUser.id = id;
-}
-
-void *dg::getUserWinPointer(int id) {
-    if (id <= 0)
-        DG_CORE_FATAL("Error id given in getWinUserPointer");
-    if (_winUser.id > 0)
-        if (id != _winUser.id)
-            DG_CORE_FATAL("Error id concordances in getWinUserPointer");
-    return _winUser.data;
-}
-
 dg::window_API *dg::window_API::create(const window &props) {
     return new dg::window_GL(props);
 }
@@ -117,18 +80,18 @@ void dg::window_GL::setCallback() {
         
         switch (action) {
         case GLFW_RELEASE: {
-            dg::keyReleased event(key);
+            dg::keyReleased event(key, scancode);
             data.eventCallback(event);
             break;
         }
         case GLFW_PRESS: {
-            dg::KeyPressed event(key);
+            dg::KeyPressed event(key, scancode);
             data.eventCallback(event);
             break;
         }
         // case 2  modif possible
         case GLFW_REPEAT: {
-            dg::KeyPressed event(key);
+            dg::KeyPressed event(key, scancode);
             data.eventCallback(event);
             break;
         }
@@ -139,8 +102,11 @@ void dg::window_GL::setCallback() {
         // add event
     });
     glfwSetCharModsCallback(_window, [](GLFWwindow *window, u_int codepoint, int mods) {
-        (void)window;(void)codepoint;(void)mods;
-        //add event
+        (void)mods;
+        winData &data = *static_cast<winData *>(glfwGetWindowUserPointer(window));
+
+        dg::keyType event(codepoint);
+        data.eventCallback(event);
     });
     glfwSetMouseButtonCallback(_window, [](GLFWwindow *window, int button, int action, int mods) {
         (void)mods;

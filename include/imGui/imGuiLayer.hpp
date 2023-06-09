@@ -23,7 +23,7 @@ private:
     bool onMouseMove(mouseMoved &e);
     bool onKeyPressed(KeyPressed &e);
     bool onKeyReleased(keyReleased &e);
-    //bool onKeyType(keyType &e);
+    bool onKeyType(keyType &e);
     bool onWindowRezise(windowResizEvent &e);
 private:
     float _time = 0.0f;

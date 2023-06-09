@@ -13,10 +13,12 @@ dg::layerStack::~layerStack() {
 
 void dg::layerStack::pushLayer(layer *layer) {
     _layerInsert = _layers.emplace(_layerInsert, layer);
+    _size++;
 }
 
 void dg::layerStack::pushOverlay(layer *overlay) {
     _layers.emplace_back(overlay);
+    _size++;
 }
 
 void dg::layerStack::popLayer(layer *layer) {
@@ -25,6 +27,7 @@ void dg::layerStack::popLayer(layer *layer) {
         return;
     _layers.erase(it);
     _layerInsert--;
+    _size--;
 }
 
 void dg::layerStack::popOverlay(layer *overlay) {

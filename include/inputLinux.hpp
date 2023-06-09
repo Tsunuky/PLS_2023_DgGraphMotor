@@ -2,7 +2,6 @@
 
 #include <input.hpp>
 
-
 namespace dg {
 
 class linuxInput : public input {

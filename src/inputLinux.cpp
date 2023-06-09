@@ -47,32 +47,9 @@ int linuxInput::getMouseYImpl() {
 }
 
 void keyMap::initKeymap() {
-    for (size_t i = 0; i != 256; i++) {
+    for (size_t i = 0; i != DG_KEY_LAST; i++) {
         _keymap.emplace(i, std::make_pair(false, false));
     }
-    /*_keymap.emplace(256 + GLUT_KEY_PAGE_DOWN, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_PAGE_UP, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_INSERT, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_RIGHT, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_DOWN, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_HOME, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_LEFT, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_END, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_UP, std::make_pair(false, false));
-
-    _keymap.emplace(256 + GLUT_KEY_F1, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F2, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F3, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F4, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F5, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F6, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F7, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F8, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F9, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F10, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F11, std::make_pair(false, false));
-    _keymap.emplace(256 + GLUT_KEY_F12, std::make_pair(false, false));
-    */
 }
 
 std::pair<bool, bool> keyMap::getKeyInMap(int keycode) {
@@ -84,9 +61,8 @@ void keyMap::setKeyInMap(int keycode, bool status, bool repeat) {
     _keymap[keycode].second = repeat;
 }
 
-//faire par rapport au button get par glut
 void buttonMap::initButtonmap() {
-    for (size_t i = 0; i != 12; i++) {
+    for (size_t i = 0; i != DG_MOUSE_BUTTON_LAST; i++) {
         _buttonmap.emplace(i, std::make_pair(false, false));
     }
 }

@@ -10,7 +10,7 @@ enum class evenType {
     none = 0,
     windowClose, windowResize, windowFocus, windowLostFocus, windowMoved, windowId,
     appTick, appUpdate, appRender,
-    KeyPressed, keyReleased,
+    KeyPressed, keyReleased, keyType,
     mouseButtonPressed, mouseButtonReleased, mouseMoved, mouseScrolled,
 };
 
