@@ -28,6 +28,8 @@ public:
         _instance = this;
         _win.reset(dg::window_API::create(dg::window(name)));
         _win->setEventCallback(BIND_EVENT_FN(application::onEvent));
+        _imguiLayer = new imGuiLayer();
+        pushOverlay(_imguiLayer);
     };
     virtual ~application() {};
 public:
@@ -43,6 +45,7 @@ public:
     inline dg::window_API &getWindow() {return *_win;};
 private:
     std::unique_ptr<dg::window_API> _win;
+    imGuiLayer *_imguiLayer;
     dg::layerStack _layerStack;
     static application *_instance;
     bool isRunning = true;

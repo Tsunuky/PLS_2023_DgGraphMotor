@@ -37,6 +37,7 @@ public:
 public:
     inline u_int getsizeWidth() const override {return this->_data.width;};
     inline u_int getsizeHeight() const override {return this->_data.height;};
+    inline void *getNativeWindow() const override {return this->_window;};
     inline bool isVsync() const override {return this->_data.sync;};
     inline winData &getWinData() {return _data;};
     inline dg::layerStack *getLayerStack() {return _layerStack;};

@@ -30,6 +30,11 @@ void dg::application::run() {
         for (layer *layer: _layerStack) {
             layer->onUpdate();
         }
+        _imguiLayer->begin();
+        for (layer *layer: _layerStack) {
+            layer->onImguiRender();
+        }
+        _imguiLayer->end();
         _win.get()->onUpdate();
     }
 };

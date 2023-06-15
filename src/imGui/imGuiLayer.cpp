@@ -1,18 +1,19 @@
 #include <application.hpp>
 #include <imGuiLayer.hpp>
 
-#include <imgui_impl_opengl3.hpp>
-#include <imgui_impl_glfw.hpp>
-#include <imgui_internal.h>
 #include <imgui.h>
+
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+
+#include <imgui_internal.h>
 
 #define GL_SILENCE_DEPRECATION
 
-static bool show_demo_window = true;
-static bool show_another_window = true;
-ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 void dg::imGuiLayer::onAttach() {
+    application &app = application::get();
+    GLFWwindow *window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -27,64 +28,32 @@ void dg::imGuiLayer::onAttach() {
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
-    if (!ImGui_ImplOpenGL3_Init("#version 460"))
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    if (!ImGui_ImplOpenGL3_Init("#version 430"))
         DG_CORE_ERROR("ImGui opengl3 init fail");
-    ImGui_ImplGlfw_InitForOpenGL(glfwGetCurrentContext(), true);
-
 }
 
 void dg::imGuiLayer::onDetach() {
     ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void dg::imGuiLayer::onUpdate() {
-    glUseProgram(0);
-
-    application &app = application::get();
-    ImGuiIO& io = ImGui::GetIO();
-    io.DisplaySize = ImVec2(app.getWindow().getsizeWidth(), app.getWindow().getsizeHeight());
-
-    float time = glfwGetTime();
-    io.DeltaTime = _time < 0.0f ? (time - _time) : (1.0f / 60.0f);
-    _time = time;
-
+void dg::imGuiLayer::begin() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
 
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-    if (show_another_window) {
-        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-        {}
-    }
-    static float f = 0.0f;
-    static int counter = 0;
+void dg::imGuiLayer::end() {
+    application &app = application::get();
+    ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::Begin("Hello, world!");
-
-    ImGui::Text("This is some useful text.");
-    ImGui::Checkbox("Demo Window", &show_demo_window);
-    ImGui::Checkbox("Another Window", &show_another_window);
-
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-    ImGui::ColorEdit3("clear color", (float*)&clear_color);
-
-    if (ImGui::Button("Button"))
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-    ImGui::End();
+    io.DisplaySize = ImVec2(app.getWindow().getsizeWidth(), app.getWindow().getsizeHeight());
     ImGui::Render();
-
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    glUseProgram(0);
+
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
@@ -93,6 +62,13 @@ void dg::imGuiLayer::onUpdate() {
     }
 }
 
+void dg::imGuiLayer::onImguiRender() {
+    static bool show = true;
+    ImGui::ShowDemoWindow(&show);
+}
+//
+
+/*
 void dg::imGuiLayer::onEvent(event &event) {
     dg::eventDispatcher dispatcher(event);
 
@@ -230,7 +206,7 @@ static bool ImGui_ImplGlfw_ShouldChainCallback(GLFWwindow* window)
     //ImGuiContext* bd = imguiBackendData();
     //return bd->CallbacksChainForAllWindows ? true : (window == bd->Window);
     return false;
-}*/
+}
 
 bool dg::imGuiLayer::onMouseButtonPressed(mouseButtonPressed &e) {
     ImGuiIO &io = ImGui::GetIO();
@@ -306,3 +282,4 @@ bool dg::imGuiLayer::onWindowRezise(windowResizEvent &e) {
     DG_CORE_ERROR("resize imGui {0} {1}", e.getWidth(), e.getHeight());
     return false;
 }
+*/

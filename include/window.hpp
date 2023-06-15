@@ -32,6 +32,7 @@ public:
 public:
     virtual u_int getsizeWidth() const = 0;
     virtual u_int getsizeHeight() const = 0;
+    virtual void *getNativeWindow() const = 0;
 public:
     static window_API *create(const window &props = window());
 };

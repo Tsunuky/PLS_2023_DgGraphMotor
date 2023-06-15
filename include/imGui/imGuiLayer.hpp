@@ -12,10 +12,14 @@ public:
     imGuiLayer(): layer("imGuiLayer") {};
     ~imGuiLayer() = default;
 public:
-    void onDetach();
-    void onAttach();
-    void onUpdate();
-    void onEvent(event &event);
+    virtual void onDetach() override;
+    virtual void onAttach() override;
+    virtual void onImguiRender() override;
+public:
+    void begin();
+    void end();
+    //void onEvent(event &event);
+/*
 private:
     bool onMouseButtonPressed(mouseButtonPressed &e);
     bool onMouseButtonReleased(mouseButtonReleased &e);
@@ -25,6 +29,7 @@ private:
     bool onKeyReleased(keyReleased &e);
     bool onKeyType(keyType &e);
     bool onWindowRezise(windowResizEvent &e);
+*/
 private:
     float _time = 0.0f;
 };
