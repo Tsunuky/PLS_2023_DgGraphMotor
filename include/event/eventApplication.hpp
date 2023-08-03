@@ -2,28 +2,18 @@
 
 #include <sstream>
 #include <event.hpp>
-//#include <window_gl.hpp>
-
-/*void function(void *data) {
-    u_int *cc = (u_int *)data;
-    DG_TRACE("hello je suis un chat de taille {0}", *cc);
-}*/
 
 namespace dg {
 
 class windowResizEvent: public event {
 public:
     windowResizEvent(u_int width, u_int height): _width(width), _height(height) {
-        //_userFunc = function;
-        //DG_ERROR("{0}" , fmt::ptr(&_winUser));
     }
 public:
-    // peux call userpointeru avec le getwindow pour moifier les value actuelle de la class window 
     std::string toString() const override {
         std::stringstream ss;
 
         ss << "WindowResizeEvent: " << _width << ", " << _height;
-        //_userFunc((void *)&_width);
         return ss.str();
     }
 	EVENT_CLASS_TYPE(windowResize)

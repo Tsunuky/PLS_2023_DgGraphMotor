@@ -16,17 +16,25 @@ void dg::application::onEvent(dg::event &e) {
 }
 
 void dg::application::run() {
-    //GLFWwindow yolo = glfwGetX11Window(&yolo);
-
     while (isRunning) {
-        if (input::istKeyPress(DG_KEY_A) == true)
-            DG_TRACE("a press");
-        if (input::whileKeyPress(DG_KEY_Q) == true)
-            DG_CORE_TRACE("q press");
-
+        //DG_CORE_INFO("thread concurenced :{0}", n);
+        //if (input::istKeyPress(DG_KEY_A) == true)
+        //    DG_TRACE("a press");
+        //if (input::whileKeyPress(DG_KEY_Q) == true)
+        //    DG_CORE_TRACE("q press");
         //tmp test hangement de lib
-        glClearColor(1, 0, 1, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.1f, 0.1f, 0.1f, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        _shader2->bind();
+        _squareVertexArray->bind();
+        glDrawElements(GL_TRIANGLES, _squareVertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+
+
+        _shader->bind();
+        _vertexArray->bind();
+        glDrawElements(GL_TRIANGLES, _indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
+        
         for (layer *layer: _layerStack) {
             layer->onUpdate();
         }

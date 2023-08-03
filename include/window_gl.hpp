@@ -3,7 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <window.hpp>
 
+#include <renderer/graphiContext.hpp>
+
 #include <log.hpp>
+
 namespace dg {
 class window_GL: public window_API {
 public:
@@ -28,8 +31,8 @@ public:
     void initWindow();
     void setOrtho();
 public:
-    void clearColor(const dg::rgba &);
-    void scalePixel(float);
+    //void clearColor(const dg::rgba &);
+    //void scalePixel(float);
     void setVsync(bool enabled) override;
     void onUpdate() override;
     void setEventCallback(const eventCallbackFn &callback) override {_data.eventCallback = callback;};
@@ -40,12 +43,12 @@ public:
     inline void *getNativeWindow() const override {return this->_window;};
     inline bool isVsync() const override {return this->_data.sync;};
     inline winData &getWinData() {return _data;};
-    inline dg::layerStack *getLayerStack() {return _layerStack;};
+    //inline dg::layerStack *getLayerStack() {return _layerStack;};
 private:
-    void setCallback();
+    void setCallbackGlfw();
 private:
-    dg::layerStack *_layerStack;
     GLFWwindow* _window;
+    GraphiContext *_context;
     winData _data; //peux faire un unique aui fait un suer pointeur
 };
 

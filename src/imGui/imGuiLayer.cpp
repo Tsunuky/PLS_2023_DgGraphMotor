@@ -6,6 +6,10 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
+//tmp
+#include <eventApplication.hpp>
+#include <window_gl.hpp>
+
 #include <imgui_internal.h>
 
 #define GL_SILENCE_DEPRECATION
@@ -52,7 +56,6 @@ void dg::imGuiLayer::end() {
     io.DisplaySize = ImVec2(app.getWindow().getsizeWidth(), app.getWindow().getsizeHeight());
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    glUseProgram(0);
 
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context = glfwGetCurrentContext();
@@ -63,8 +66,19 @@ void dg::imGuiLayer::end() {
 }
 
 void dg::imGuiLayer::onImguiRender() {
+    application &app = application::get();
+    GLFWwindow *window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
     static bool show = true;
+    static bool close = false;
+
     ImGui::ShowDemoWindow(&show);
+    ImGui::Checkbox("Close", &close);
+    if (close)  {
+        dg::window_GL::winData &data = *static_cast<dg::window_GL::winData *>(glfwGetWindowUserPointer(window));
+
+        dg::windowCloseEvent event;
+        data.eventCallback(event);
+    }
 }
 //
 
@@ -194,7 +208,6 @@ static ImGuiKey glgwtKeyToImGuiKey(int key) {
     }
 }
 
-/*
 static ImGuiContext* imguiBackendData()
 {
     return ImGui::GetCurrentContext() ? (ImGuiContext*)ImGui::GetIO().BackendPlatformUserData : nullptr;

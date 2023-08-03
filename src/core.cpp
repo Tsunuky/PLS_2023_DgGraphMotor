@@ -2,10 +2,10 @@
 
 #include <glad/glad.hpp>
 #include <window_gl.hpp>
-#include <shader.hpp>
 #include <core.hpp>
 #include <log.hpp>
 
+/**
 std::string vertexshader =
     "#version 440 core\n"
     "#pragma debug(on)\n"
@@ -57,3 +57,4 @@ void dg::core::glAllInit() {
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);//test
 
 }
+*/

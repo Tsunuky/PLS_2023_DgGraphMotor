@@ -7,7 +7,7 @@ public:
     exampleLayer(): layer("example") {}
 public:
     void onUpdate() override {
-        if (dg::input::istKeyPress(DG_KEY_TAB))
+        if (dg::input::isKeyPress(DG_KEY_TAB))
             DG_INFO("tab press in sand box");
         //DG_INFO("exampleLayer: update");
     }

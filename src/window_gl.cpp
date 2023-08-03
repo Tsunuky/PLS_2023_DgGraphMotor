@@ -1,7 +1,4 @@
 //#include <precompile.hpp>
-#include <glad/glad.hpp>
-
-#include <log.hpp>
 #include <window_gl.hpp>
 
 #include <eventApplication.hpp>
@@ -10,11 +7,13 @@
 #include <eventMouse.hpp>
 #include <inputLinux.hpp>
 
+#include <renderer/openGLContext.hpp>
+
 dg::window_API *dg::window_API::create(const window &props) {
     return new dg::window_GL(props);
 }
 
-void dg::window_GL::setCallback() {
+void dg::window_GL::setCallbackGlfw() {
     glfwSetWindowSizeCallback(_window, [](GLFWwindow *window, int width , int height) {
         winData &data = *static_cast<winData *>(glfwGetWindowUserPointer(window));
         
@@ -150,33 +149,31 @@ void dg::window_GL::setCallback() {
 }
 
 void dg::window_GL::initWindow() {
+#ifdef _glfw3_h_
     DG_CORE_ASSERT(glfwInit(), "Error initialisation of glfw");
 	_window = glfwCreateWindow((int)_data.width, (int)_data.height, _data.title.c_str(), nullptr, nullptr);
     DG_CORE_INFO("Creating Window '{0}' width: {1}, height: {2}", _data.title, _data.width, _data.height);
-    glfwMakeContextCurrent(_window);
-    DG_CORE_ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Error initialisation of glad");
     glfwSetWindowUserPointer(_window, &_data);
+    setCallbackGlfw();
+#endif
+    _context = new OpenGLContext(_window);
+    _context->init();
     setVsync(true);
-    setCallback();
 }
 
 void dg::window_GL::onUpdate() {
+#ifdef _glfw3_h_
     glfwPollEvents();
-    glfwSwapBuffers(_window);
+#endif
+    _context->swaBuffer();
 }
 
 void dg::window_GL::setVsync(bool enable) {
+#ifdef _glfw3_h_
     if (enable)
         glfwSwapInterval(1);
     else
         glfwSwapInterval(0);
+#endif
     _data.sync = enable;
-}
-
-void dg::window_GL::clearColor(const dg::rgba &color) {
-    glClearColor(color.r, color.g, color.b, color.a);
-}
-
-void dg::window_GL::scalePixel(float scale) {
-    glPointSize(scale);
 }

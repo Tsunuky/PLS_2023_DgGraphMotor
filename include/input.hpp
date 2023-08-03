@@ -9,7 +9,7 @@ namespace dg {
 
 class input {
 public:
-    inline static bool istKeyPress(int keycode) {return _instance->isKeyPressImpl(keycode);}
+    inline static bool isKeyPress(int keycode) {return _instance->isKeyPressImpl(keycode);}
     inline static bool isButtonPress(int button) {return _instance->isButtonPressImpl(button);};
     inline static bool whileKeyPress(int keycode) {return _instance->whileKeyPressImpl(keycode);}
     inline static bool whileButtonPress(int button) {return _instance->whileButtonPressImpl(button);};
