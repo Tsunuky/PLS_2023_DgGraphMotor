@@ -10,8 +10,8 @@ enum class evenType {
     none = 0,
     windowClose, windowResize, windowFocus, windowLostFocus, windowMoved, windowId,
     appTick, appUpdate, appRender,
-    KeyPressed, keyReleased, keySpePressed, keySpeReleased,
-    mouseButtonPressed, mouseButtonReleased, mouseMoved, mouseMovedClick, mouseScrolled,
+    KeyPressed, keyReleased, keyType,
+    mouseButtonPressed, mouseButtonReleased, mouseMoved, mouseScrolled,
 };
 
 enum eventCategory {

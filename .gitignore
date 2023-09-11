@@ -33,3 +33,7 @@
 
 # Config File
 *.ini
+
+# VScode file
+.vscode/*
+

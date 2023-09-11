@@ -18,9 +18,12 @@ public:
 public:
     std::vector<layer*>::iterator begin() {return _layers.begin();};
     std::vector<layer*>::iterator end() {return _layers.end();};
+public:
+    inline u_int getSize() const {return _size;};
 private:
     std::vector<layer*> _layers;
-    std::vector<layer*>::iterator _layerInsert;
+    u_int _layerInsertIndex = 0;
+    u_int _size = 0;
 };
 
 }

@@ -9,102 +9,68 @@ namespace dg {
 
 class KeyPressed: public event {
 public:
-    KeyPressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+    KeyPressed(u_int key, u_int nativeKey): _userFunc(NULL), _key(key), _nativeKey(nativeKey) {
         keyMap::setKeyInMap(key, true);
     };
 public:
     std::string toString() const override {
         std::stringstream ss;
 
-        ss << "Key pressed "<< _key << " at x: " << _x << " y: " << _y;
+        ss << "Key pressed "<< _key;
         return ss.str();
     }
    	EVENT_CLASS_TYPE(KeyPressed)
 	EVENT_CLASS_CATEGORY(eventCategoryKeyboard)
 public:
     inline u_int getKey() const {return _key;};
-    inline int getX() const {return _x;};
-    inline int getY() const {return _y;};
+    inline u_int getNativeCode() const {return _nativeKey;};
 private:
     std::function<void(void *)> _userFunc;
     u_int _key;
-    int _x;
-    int _y;
-};
-
-class keySpePressed: public event {
-public:
-    keySpePressed(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
-        keyMap::setKeyInMap(256 + key, true);
-    };
-public:
-    std::string toString() const override {
-        std::stringstream ss;
-
-        ss << "Key special pressed "<< _key << " at x: " << _x << " y: " << _y;
-        return ss.str();
-    }
-   	EVENT_CLASS_TYPE(keySpePressed)
-	EVENT_CLASS_CATEGORY(eventCategoryKeyboard) 
-public:
-    inline u_int getKey() const {return _key;};
-    inline int getX() const {return _x;};
-    inline int getY() const {return _y;};
-private:
-    std::function<void(void *)> _userFunc;
-    u_int _key;
-    int _x;
-    int _y;
+    u_int _nativeKey;
 };
 
 class keyReleased: public event {
 public:
-    keyReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
+    keyReleased(u_int key, u_int nativeKey): _userFunc(NULL), _key(key), _nativeKey(nativeKey) {
         keyMap::setKeyInMap(key, false);
     };
 public:
     std::string toString() const override {
         std::stringstream ss;
 
-        ss << "Key released "<< _key << " at x: " << _x << " y: " << _y;
+        ss << "Key released "<< _key;
         return ss.str();
     }
    	EVENT_CLASS_TYPE(keyReleased)
 	EVENT_CLASS_CATEGORY(eventCategoryKeyboard) 
 public:
     inline u_int getKey() const {return _key;};
-    inline int getX() const {return _x;};
-    inline int getY() const {return _y;};
+    inline u_int getNativeCode() const {return _nativeKey;};
 private:
     std::function<void(void *)> _userFunc;
     u_int _key;
-    int _x;
-    int _y;
+    u_int _nativeKey;
 };
 
-class keySpeReleased: public event {
+class keyType: public event {
 public:
-    keySpeReleased(u_int key, int x, int y): _userFunc(NULL), _key(key), _x(x), _y(y) {
-        keyMap::setKeyInMap(256 + key, true);
+    keyType(u_int keytype): _userFunc(NULL), _keytype(keytype) {
     };
 public:
     std::string toString() const override {
         std::stringstream ss;
 
-        ss << "Key special released "<< _key << " at x: " << _x << " y: " << _y;
+        ss << "Key Type " << _keytype;
         return ss.str();
     }
-   	EVENT_CLASS_TYPE(keySpeReleased)
-	EVENT_CLASS_CATEGORY(eventCategoryKeyboard)
+   	EVENT_CLASS_TYPE(keyType)
+	EVENT_CLASS_CATEGORY(eventCategoryKeyboard) 
 public:
-    inline u_int getKey() const {return _key;};
-    inline int getX() const {return _x;};
-    inline int getY() const {return _y;}; 
+    inline u_int getKeyType() const {return _keytype;};
 private:
     std::function<void(void *)> _userFunc;
-    u_int _key;
-    int _x;
-    int _y;
+    u_int _keytype;
 };
 
 }

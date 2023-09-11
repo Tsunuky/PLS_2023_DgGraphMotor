@@ -12,6 +12,7 @@ public:
     virtual void onAttach() {};
     virtual void onDetach() {};
     virtual void onUpdate() {};
+    virtual void onImguiRender() {};
     virtual void onEvent(event &e) {(void)e;};
 public:
     inline const std::string &getName() const {return _debugName;};
