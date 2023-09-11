@@ -1,6 +1,6 @@
 #define GL_GLEXT_PROTOTYPES
 
-#include <renderer/openGlShader.hpp>
+#include <OpenGL/OpenGLShader.hpp>
 #include <log.hpp>
 
 void dg::shaderOpenGL::bind() const {

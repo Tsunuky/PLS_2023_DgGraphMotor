@@ -3,6 +3,9 @@
 #define GLFW_EXPOSE_NATIVE_X11
 #include <GLFW/glfw3native.h>
 
+#include <renderer/renderer.hpp>
+
+
 void dg::application::onEvent(dg::event &e) {
     dg::eventDispatcher dispatcher(e);
 
@@ -23,17 +26,29 @@ void dg::application::run() {
         //if (input::whileKeyPress(DG_KEY_Q) == true)
         //    DG_CORE_TRACE("q press");
         //tmp test hangement de lib
-        glClearColor(0.1f, 0.1f, 0.1f, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        //glClearColor(0.1f, 0.1f, 0.1f, 1);
+        //glClear(GL_COLOR_BUFFER_BIT);
 
+        renderCommand::setClearColor({0.1f, 0.1f, 0.1f, 1});
+        renderCommand::clear();
+
+        renderer::beginScene(); // add camera, light and environement
+        
         _shader2->bind();
-        _squareVertexArray->bind();
-        glDrawElements(GL_TRIANGLES, _squareVertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
-
-
+        renderer::submit(_squareVertexArray); // overload pour send mesh ou vertex array
+        
         _shader->bind();
-        _vertexArray->bind();
-        glDrawElements(GL_TRIANGLES, _indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
+        renderer::submit(_vertexArray); // overload pour send mesh ou vertex array
+
+        renderer::endScene();
+
+        //_shader2->bind();
+        //_squareVertexArray->bind();
+        //glDrawElements(GL_TRIANGLES, _squareVertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+
+        //_shader->bind();
+        //_vertexArray->bind();
+        //glDrawElements(GL_TRIANGLES, _indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
         
         for (layer *layer: _layerStack) {
             layer->onUpdate();

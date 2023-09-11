@@ -13,7 +13,7 @@ public:
     OpenGLContext(GLFWwindow* window);
 public:
     virtual void init() override;
-    virtual void swaBuffer() override;
+    virtual void swapBuffer() override;
 private:
     GLFWwindow *_windowHandler;
 };

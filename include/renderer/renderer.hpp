@@ -1,17 +1,17 @@
 #pragma once
 
-namespace dg {
+#include <renderer/renderCommand.hpp>
 
-enum class renderAPI {
-    none = 0,
-    openGL = 1
-};
+namespace dg {
 
 class renderer {
 public:
-    inline static renderAPI getAPI() {return _rendererAPI;};
-private:
-    static renderAPI _rendererAPI;
+    static void beginScene();
+    static void endScene();
+
+    static void submit(const std::shared_ptr<vertexArray> &vertexArray);
+public:
+    inline static rendererAPI::API getAPI() {return rendererAPI::getAPI();};
 };
 
 }

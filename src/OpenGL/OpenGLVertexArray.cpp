@@ -1,4 +1,4 @@
-#include <renderer/OpenGLVertexArray.hpp>
+#include <OpenGL/OpenGLVertexArray.hpp>
 
 namespace dg {
 

@@ -1,4 +1,4 @@
-#include <renderer/openGlBuffer.hpp>
+#include <OpenGL/OpenGLBuffer.hpp>
 
 void dg::openGLVertexBuffer::bind() const {
     glBindBuffer(GL_ARRAY_BUFFER, _renderedId);

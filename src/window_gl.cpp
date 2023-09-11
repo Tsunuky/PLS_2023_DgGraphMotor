@@ -7,7 +7,7 @@
 #include <eventMouse.hpp>
 #include <inputLinux.hpp>
 
-#include <renderer/openGLContext.hpp>
+#include <OpenGL/OpenGLContext.hpp>
 
 dg::window_API *dg::window_API::create(const window &props) {
     return new dg::window_GL(props);
@@ -165,7 +165,7 @@ void dg::window_GL::onUpdate() {
 #ifdef _glfw3_h_
     glfwPollEvents();
 #endif
-    _context->swaBuffer();
+    _context->swapBuffer();
 }
 
 void dg::window_GL::setVsync(bool enable) {

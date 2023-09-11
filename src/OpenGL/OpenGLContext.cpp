@@ -1,7 +1,7 @@
 #include <glad/glad.hpp>
 #include <GLFW/glfw3.h>
 
-#include <renderer/openGLContext.hpp>
+#include <OpenGL/OpenGLContext.hpp>
 
 namespace dg {
 
@@ -20,7 +20,7 @@ void OpenGLContext::init() {
 
 }
 
-void OpenGLContext::swaBuffer() {
+void OpenGLContext::swapBuffer() {
     glfwSwapBuffers(_windowHandler);
 }
 

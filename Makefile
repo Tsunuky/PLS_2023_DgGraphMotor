@@ -7,10 +7,14 @@ FLAG		=	-std=c++20 -W -Wall -Wextra -g3
 INCLUDE		=	-I./include/ 
 INCLUDE	   +=   -I./include/event/
 INCLUDE	   +=   -I./include/imGui/
+INCLUDE	   +=	-I./include/renderer/
+INCLUDE	   +=	-I./include/OpenGL/
+
 #INCLUDE	   +=   -I./include/precompile/
 INCLUDE	   +=   -I./submodule/spdlog/include/
 INCLUDE	   +=	-I./submodule/imgui/
 INCLUDE	   +=	-I./submodule/glm/
+
 
 LIB			=	-lstdc++ -lfmt -lm -ldl -lgcc_s -lavcall -O0 -g3 -ggdb3 -lGL -lGLU -lGLEW -limGui -lglfw
 LIB		   += 	-L./submodule/spdlog/build/ -L./submodule/
@@ -21,7 +25,9 @@ PCH_SRC 	=	$(PCH_DIR)/precompile.hpp
 #PCH_HEADER	=
 
 SRC			=	$(wildcard src/*.cpp) \
-				$(wildcard src/imGui/*.cpp)
+				$(wildcard src/imGui/*.cpp) \
+				$(wildcard src/renderer/*.cpp) \
+				$(wildcard src/OpenGL/*.cpp)
 OBJ			=	$(SRC:.cpp=.o)
 
 #all:		precompile bin

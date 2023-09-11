@@ -2,7 +2,8 @@
 
 #include <log.hpp>
 
-#include <glad/glad.hpp>
+//#include <glad/glad.hpp>
+#include <OpenGL/OpenGLShader.hpp>
 
 #include <eventApplication.hpp>
 #include <window_gl.hpp>
@@ -11,7 +12,6 @@
 #include <renderer/buffer.hpp>
 #include <renderer/vertexArray.hpp>
 
-#include <renderer/openGlShader.hpp>
 
 #define BIND_EVENT_FN(x) std::bind_front(&x, this)
 
@@ -81,7 +81,7 @@ public:
             #version 440 core
             #pragma debug(on)
             
-            layout(location = 0) out vec3 position;
+            layout(location = 0) in vec3 position;
             
             out vec3 v_Position;
             
@@ -95,7 +95,7 @@ public:
             #version 440 core
             #pragma debug(on)
             
-            layout(location = 0) in vec4 color;
+            layout(location = 0) out vec4 color;
 
             in vec3 v_Position;
 
