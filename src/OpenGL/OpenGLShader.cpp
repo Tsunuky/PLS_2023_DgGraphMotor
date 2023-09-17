@@ -1,6 +1,7 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include <OpenGL/OpenGLShader.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <log.hpp>
 
 void dg::shaderOpenGL::bind() const {
@@ -10,6 +11,12 @@ void dg::shaderOpenGL::bind() const {
 
 void dg::shaderOpenGL::unbind() const {
     glUseProgram(0);
+}
+
+//si on bind pas avant crashhhh
+void dg::shaderOpenGL::uploadUniformMat4(const std::string &name, const glm::mat4 &matrix) {
+    GLint location = glGetUniformLocation(_rendererId, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 static void errorShaderCompile(u_int id, u_int type, const std::string &mess) {

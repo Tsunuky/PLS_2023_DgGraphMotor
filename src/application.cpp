@@ -5,7 +5,6 @@
 
 #include <renderer/renderer.hpp>
 
-
 void dg::application::onEvent(dg::event &e) {
     dg::eventDispatcher dispatcher(e);
 
@@ -32,13 +31,20 @@ void dg::application::run() {
         renderCommand::setClearColor({0.1f, 0.1f, 0.1f, 1});
         renderCommand::clear();
 
-        renderer::beginScene(); // add camera, light and environement
+        //_camera.setPosition({0.5f, 0.5f, 0.0f});
+        //_camera.setRotation(45.0f);
+
+        //DG_CORE_INFO("camera rotation :{0}", _camera.getRotation());
+
+        renderer::beginScene(_camera); // add camera, light and environement
         
-        _shader2->bind();
-        renderer::submit(_squareVertexArray); // overload pour send mesh ou vertex array
+        //_shader2->bind();
+        //_shader2->uploadUniformMat4("u_viewProjection", _camera.getviewProjectionMatrix());
+        renderer::submit(_shader2 , _squareVertexArray); // overload pour send mesh ou vertex array
         
-        _shader->bind();
-        renderer::submit(_vertexArray); // overload pour send mesh ou vertex array
+        //_shader->bind();
+        //_shader->uploadUniformMat4("u_viewProjection", _camera.getviewProjectionMatrix());
+        renderer::submit(_shader , _vertexArray); // overload pour send mesh ou vertex array
 
         renderer::endScene();
 

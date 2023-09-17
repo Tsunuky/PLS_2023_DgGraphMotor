@@ -2,6 +2,7 @@
 
 #include <string>
 #include <glad/glad.hpp>
+#include <glm/glm.hpp>
 
 namespace dg {
 
@@ -16,6 +17,7 @@ public:
 public:
     void bind() const;
     void unbind() const;
+    void uploadUniformMat4(const std::string &name, const glm::mat4 &matrix);
 private:
     void createShader(const std::string &vertex, const std::string &fragment);
     void attachShader() const;

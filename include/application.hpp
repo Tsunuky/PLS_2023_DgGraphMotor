@@ -11,7 +11,7 @@
 #include <imGui/imGuiLayer.hpp>
 #include <renderer/buffer.hpp>
 #include <renderer/vertexArray.hpp>
-
+#include <renderer/orthographiCamera.hpp>
 
 #define BIND_EVENT_FN(x) std::bind_front(&x, this)
 
@@ -24,7 +24,8 @@ struct appliSpecification {
 
 class application {
 public:
-    application(std::string name = "Window") {
+    application(std::string name = "Window")
+    : _camera(-1.6f, 1.6f, -0.9f, 0.9f) {
         dg::log::init();
     
         // mettre ca dans init
@@ -48,13 +49,15 @@ public:
             layout(location = 0) in vec3 position;
             layout(location = 1) in vec4 color;
             
+            uniform mat4 u_viewProjection;
+
             out vec3 v_Position;
             out vec4 v_color;
             
             void main() {
                 v_Position = position;
                 v_color = color;
-                gl_Position = vec4(position, 1.0);
+                gl_Position = u_viewProjection * vec4(position, 1.0);
             }
         )";
 
@@ -82,12 +85,14 @@ public:
             #pragma debug(on)
             
             layout(location = 0) in vec3 position;
-            
+
+            uniform mat4 u_viewProjection;
+
             out vec3 v_Position;
             
             void main() {
                 v_Position = position;
-                gl_Position = vec4(position, 1.0);
+                gl_Position = u_viewProjection * vec4(position, 1.0);
             }
         )";
 
@@ -158,10 +163,10 @@ public:
     inline dg::window_API &getWindow() {return *_win;};
 private:
     std::shared_ptr<dg::window_API> _win;
+
     std::shared_ptr<vertexBuffer> _vertexBuffer;
     std::shared_ptr<indexBuffer> _indexBuffer;
     std::shared_ptr<vertexArray> _vertexArray;
-
     std::shared_ptr<vertexArray> _squareVertexArray;
     
     imGuiLayer *_imguiLayer;
@@ -169,8 +174,10 @@ private:
     static application *_instance;
     bool isRunning = true;
 
-    std::unique_ptr<shaderOpenGL> _shader;
-    std::unique_ptr<shaderOpenGL> _shader2;
+    std::shared_ptr<shaderOpenGL> _shader;
+    std::shared_ptr<shaderOpenGL> _shader2;
+
+    orthographiCamera _camera;
 };
 
 inline application *application::_instance = nullptr;
