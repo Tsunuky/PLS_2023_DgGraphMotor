@@ -10,7 +10,6 @@
 #include <layerStack.hpp>
 #include <imGui/imGuiLayer.hpp>
 #include <renderer/buffer.hpp>
-#include <renderer/vertexArray.hpp>
 #include <renderer/orthographiCamera.hpp>
 
 #define BIND_EVENT_FN(x) std::bind_front(&x, this)
@@ -24,8 +23,7 @@ struct appliSpecification {
 
 class application {
 public:
-    application(std::string name = "Window")
-    : _camera(-1.6f, 1.6f, -0.9f, 0.9f) {
+    application(std::string name = "Window") {
         dg::log::init();
     
         // mettre ca dans init
@@ -39,6 +37,7 @@ public:
         _imguiLayer = new imGuiLayer();
         pushOverlay(_imguiLayer);
 
+        /*
         _vertexArray.reset(vertexArray::create());
 
         // tmp la pour test
@@ -148,6 +147,7 @@ public:
         _indexBuffer.reset(indexBuffer::create(indices, sizeof(indices) / sizeof (u_int32_t)));
         _vertexArray->setIndexBuffer(_indexBuffer);
         //tmp pour le test
+        */
     };
     virtual ~application() {};
 public:
@@ -164,20 +164,13 @@ public:
 private:
     std::shared_ptr<dg::window_API> _win;
 
-    std::shared_ptr<vertexBuffer> _vertexBuffer;
-    std::shared_ptr<indexBuffer> _indexBuffer;
-    std::shared_ptr<vertexArray> _vertexArray;
-    std::shared_ptr<vertexArray> _squareVertexArray;
+    //std::shared_ptr<vertexBuffer> _vertexBuffer;
+    //std::shared_ptr<indexBuffer> _indexBuffer;
     
     imGuiLayer *_imguiLayer;
     dg::layerStack _layerStack;
     static application *_instance;
     bool isRunning = true;
-
-    std::shared_ptr<shaderOpenGL> _shader;
-    std::shared_ptr<shaderOpenGL> _shader2;
-
-    orthographiCamera _camera;
 };
 
 inline application *application::_instance = nullptr;
