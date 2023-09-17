@@ -1,6 +1,7 @@
 #pragma once
 
 #include <event.hpp>
+#include <core/timeStep.hpp>
 
 namespace dg {
 
@@ -11,7 +12,7 @@ public:
 public:
     virtual void onAttach() {};
     virtual void onDetach() {};
-    virtual void onUpdate() {};
+    virtual void onUpdate(timeStep ts) {(void)ts;};
     virtual void onImguiRender() {};
     virtual void onEvent(event &e) {(void)e;};
 public:

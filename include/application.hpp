@@ -11,6 +11,7 @@
 #include <imGui/imGuiLayer.hpp>
 #include <renderer/buffer.hpp>
 #include <renderer/orthographiCamera.hpp>
+#include <core/timeStep.hpp>
 
 #define BIND_EVENT_FN(x) std::bind_front(&x, this)
 
@@ -34,6 +35,7 @@ public:
         _instance = this;
         _win.reset(dg::window_API::create(dg::window(name)));
         _win->setEventCallback(BIND_EVENT_FN(application::onEvent));
+        //_win->setVsync(false);
         _imguiLayer = new imGuiLayer();
         pushOverlay(_imguiLayer);
 
@@ -170,6 +172,7 @@ private:
     imGuiLayer *_imguiLayer;
     dg::layerStack _layerStack;
     static application *_instance;
+    float _lastFrameTime = 0.0f;
     bool isRunning = true;
 };
 

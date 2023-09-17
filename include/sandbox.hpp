@@ -6,6 +6,7 @@
 #include <renderer/vertexArray.hpp>
 #include <renderer/renderer.hpp>
 #include <renderer/buffer.hpp>
+#include <core/timeStep.hpp>
 
 #include <OpenGL/OpenGLShader.hpp>
 
@@ -126,19 +127,20 @@ public:
         //tmp pour le test        
     }
 public:
-    void onUpdate() override {
+    void onUpdate(dg::timeStep ts) override {
+        //DG_TRACE("Delta time {0}", ts.getSeconds());
         if (dg::input::whileKeyPress(DG_KEY_LEFT))
-            _cameraPosition.x += _cameraMoveSpeed;
+            _cameraPosition.x += _cameraMoveSpeed * ts;
         if (dg::input::whileKeyPress(DG_KEY_RIGHT))
-            _cameraPosition.x -= _cameraMoveSpeed;
+            _cameraPosition.x -= _cameraMoveSpeed * ts;
         if (dg::input::whileKeyPress(DG_KEY_DOWN))
-            _cameraPosition.y += _cameraMoveSpeed;
+            _cameraPosition.y += _cameraMoveSpeed * ts;
         if (dg::input::whileKeyPress(DG_KEY_UP))
-            _cameraPosition.y -= _cameraMoveSpeed;
+            _cameraPosition.y -= _cameraMoveSpeed * ts;
         if (dg::input::whileKeyPress(DG_KEY_A))
-            _cameraRotation -= _cameraRotationSpeed;
+            _cameraRotation -= _cameraRotationSpeed * ts;
         if (dg::input::whileKeyPress(DG_KEY_D))
-            _cameraRotation += _cameraRotationSpeed;
+            _cameraRotation += _cameraRotationSpeed * ts;
         //DG_INFO("exampleLayer: update");
 
         dg::renderCommand::setClearColor({0.1f, 0.1f, 0.1f, 1});
@@ -189,9 +191,9 @@ private:
 
     dg::orthographiCamera _camera;
     glm::vec3 _cameraPosition;
-    float _cameraMoveSpeed = 0.1f;
+    float _cameraMoveSpeed = 4.0f;
 
-    float _cameraRotationSpeed = 1.0f;
+    float _cameraRotationSpeed = 60.0f;
     float _cameraRotation = 0.0f;
 };
 

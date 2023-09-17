@@ -24,10 +24,11 @@ PCH_FLAG	=	-std=c++20 -O2
 PCH_SRC 	=	$(PCH_DIR)/precompile.hpp
 #PCH_HEADER	=
 
-SRC			=	$(wildcard src/*.cpp) \
-				$(wildcard src/imGui/*.cpp) \
-				$(wildcard src/renderer/*.cpp) \
-				$(wildcard src/OpenGL/*.cpp)
+SRC			=	$(wildcard src/*.cpp) 			\
+				$(wildcard src/imGui/*.cpp) 	\
+				$(wildcard src/renderer/*.cpp) 	\
+				$(wildcard src/OpenGL/*.cpp) 	\
+				$(wildcard src/core/*.cpp)
 OBJ			=	$(SRC:.cpp=.o)
 
 #all:		precompile bin

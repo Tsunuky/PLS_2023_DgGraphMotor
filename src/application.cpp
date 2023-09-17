@@ -55,9 +55,12 @@ void dg::application::run() {
         //_shader->bind();
         //_vertexArray->bind();
         //glDrawElements(GL_TRIANGLES, _indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
-        
+        float time = (float)glfwGetTime();
+        timeStep timeStep = time - _lastFrameTime;
+
+        _lastFrameTime = time;
         for (layer *layer: _layerStack) {
-            layer->onUpdate();
+            layer->onUpdate(timeStep);
         }
         _imguiLayer->begin();
         for (layer *layer: _layerStack) {
