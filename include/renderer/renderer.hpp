@@ -11,7 +11,7 @@ public:
     static void beginScene(orthographiCamera &camera);
     static void endScene();
 
-    static void submit(const std::shared_ptr<shaderOpenGL> &shader, const std::shared_ptr<vertexArray> &vertexArray);
+    static void submit(const std::shared_ptr<shaderOpenGL> &shader, const std::shared_ptr<vertexArray> &vertexArray, const glm::mat4 &transform = glm::mat4(1.0f));
 public:
     inline static rendererAPI::API getAPI() {return rendererAPI::getAPI();};
 private:

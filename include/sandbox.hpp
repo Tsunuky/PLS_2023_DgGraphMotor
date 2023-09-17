@@ -9,11 +9,15 @@
 #include <core/timeStep.hpp>
 
 #include <OpenGL/OpenGLShader.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
+#include <GL/gl.h>
 
 class exampleLayer: public dg::layer {
 public:
     exampleLayer()
-    : layer("example"), _camera(-1.6f, 1.6f, -0.9f, 0.9f), _cameraPosition(0.0f) {
+    : layer("example"), _camera(-1.6f, 1.6f, -0.9f, 0.9f), _cameraPosition(0.0f), _squarePosition(0.0f) {
         std::string vertexshader = R"(
             #version 440 core
             #pragma debug(on)
@@ -22,6 +26,7 @@ public:
             layout(location = 1) in vec4 color;
             
             uniform mat4 u_viewProjection;
+            uniform mat4 u_transform;
 
             out vec3 v_Position;
             out vec4 v_color;
@@ -29,7 +34,7 @@ public:
             void main() {
                 v_Position = position;
                 v_color = color;
-                gl_Position = u_viewProjection * vec4(position, 1.0);
+                gl_Position = u_viewProjection * u_transform * vec4(position, 1.0);
             }
         )";
 
@@ -38,7 +43,7 @@ public:
             #pragma debug(on)
             
             layout(location = 0) out vec4 color;
-            
+        
             in vec3 v_Position;
             in vec4 v_color;
 
@@ -59,12 +64,13 @@ public:
             layout(location = 0) in vec3 position;
 
             uniform mat4 u_viewProjection;
+            uniform mat4 u_transform;
 
             out vec3 v_Position;
             
             void main() {
                 v_Position = position;
-                gl_Position = u_viewProjection * vec4(position, 1.0);
+                gl_Position = u_viewProjection * u_transform * vec4(position, 1.0);
             }
         )";
 
@@ -91,10 +97,10 @@ public:
              0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
         };
         float vertices2[4*3] = {
-            -0.75f, -0.75f, 0.0f,
-             0.75f, -0.75f, 0.0f,
-             0.75f,  0.75f, 0.0f,
-            -0.75f,  0.75f, 0.0f
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.5f,  0.5f, 0.0f,
+            -0.5f,  0.5f, 0.0f
         };
 
         std::shared_ptr<dg::vertexBuffer> square;
@@ -142,7 +148,6 @@ public:
         if (dg::input::whileKeyPress(DG_KEY_D))
             _cameraRotation += _cameraRotationSpeed * ts;
         //DG_INFO("exampleLayer: update");
-
         dg::renderCommand::setClearColor({0.1f, 0.1f, 0.1f, 1});
         dg::renderCommand::clear();
         
@@ -150,8 +155,18 @@ public:
         _camera.setRotation(_cameraRotation);
 
         dg::renderer::beginScene(_camera); // add camera, light and environement
-        dg::renderer::submit(_shader2 , _squareVertexArray); // overload pour send mesh ou vertex array
+        
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+        for (size_t y = 0; y < 20; y++) {
+            for (size_t x = 0; x < 20; x++) {
+                glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+                glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+                dg::renderer::submit(_shader2 , _squareVertexArray, transform); // overload pour send mesh ou vertex array
+            }
+        }
         dg::renderer::submit(_shader , _vertexArray); // overload pour send mesh ou vertex array
+        
         dg::renderer::endScene();
 
     }
@@ -195,6 +210,8 @@ private:
 
     float _cameraRotationSpeed = 60.0f;
     float _cameraRotation = 0.0f;
+
+    glm::vec3 _squarePosition;
 };
 
 class sandbox: public dg::application {
