@@ -130,6 +130,7 @@ public:
         std::shared_ptr<dg::indexBuffer> _indexBuffer;
         _indexBuffer.reset(dg::indexBuffer::create(indices, sizeof(indices) / sizeof (u_int32_t)));
         _vertexArray->setIndexBuffer(_indexBuffer);
+        torus(0.5, 2, 64, 64);
         //tmp pour le test        
     }
 public:
@@ -166,7 +167,8 @@ public:
             }
         }
         dg::renderer::submit(_shader , _vertexArray); // overload pour send mesh ou vertex array
-        
+        geonetry();
+        render();
         dg::renderer::endScene();
 
     }
@@ -198,6 +200,99 @@ public:
         //    _cameraPosition.y -= _cameraSpeed;
         return false;
     }
+    void torus(float r, float R, int nr, int nR) {
+        float du = 2 * M_PI / nR;
+        float dv = 2 * M_PI / nr;
+
+        for (int i = 0; i < nR; i++) {
+            float u = i * du;
+            for (int j = 0; j <= nr; j++) {
+                float v = (j % nr) * dv;
+                for (int k = 0; k < 2; k++) {
+                    float uu = u + k * du;
+
+                    float x = (R + r * cos(v)) * cos(uu);
+                    float y = (R + r * cos(v)) * sin(uu);
+                    float z = r * sin(v);
+
+                    _vertices.push_back(x);
+                    _vertices.push_back(y);
+                    _vertices.push_back(z);
+
+                    float nx = cos(v) * cos(uu);
+                    float ny = cos(v) * sin(uu);
+                    float nz = sin(v);
+
+                    _normal.push_back(nx);
+                    _normal.push_back(ny);
+                    _normal.push_back(nz);
+
+                    float tx = uu / (2 * M_PI);
+                    float ty = v / (2 * M_PI);
+
+                    _textCoord.push_back(tx);
+                    _textCoord.push_back(ty);
+
+                    glm::vec3 tg(
+                    -(R + r * cos(v)) * sin(uu),
+                     (R + r * cos(v)) * cos(uu),
+                     0.0f);
+                    tg = glm::normalize(tg);
+                    _tang.push_back(tg);
+                }
+                v += dv;
+            }
+        }
+    }
+    void render() {
+        glBindVertexArray(_vao);
+        glPointSize(4.0);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount);
+        glBindVertexArray(0);
+    }
+    void geonetry() {
+        glCreateVertexArrays(1, &_vao);
+        glBindVertexArray(_vao);
+
+        for (auto &tg: _tang) {
+            _tangents.push_back(tg.x);
+            _tangents.push_back(tg.y);
+            _tangents.push_back(tg.z);
+        }
+
+        _vertexCount = _vertices.size() / 3;
+
+        GLuint buffer[4];
+
+        glCreateBuffers(4, buffer);
+
+        glNamedBufferStorage(buffer[0], sizeof(float) * _vertices.size(), _vertices.data(), 0);
+        glVertexArrayVertexBuffer(_vao, 0, buffer[0], 0, 3 * sizeof(float));
+        glVertexArrayAttribFormat(_vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribBinding(_vao, 0, 0);
+        glEnableVertexArrayAttrib(_vao, 0);
+
+        glNamedBufferStorage(buffer[1], sizeof(float) * _normal.size(), _normal.data(), 0);
+        glVertexArrayVertexBuffer(_vao, 1, buffer[1], 0, 3 * sizeof(float));
+        glVertexArrayAttribFormat(_vao, 1, 3, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribBinding(_vao, 1, 1);
+        glEnableVertexArrayAttrib(_vao, 1);
+
+        glNamedBufferStorage(buffer[2], sizeof(float) * _textCoord.size(), _textCoord.data(), 0);
+        glVertexArrayVertexBuffer(_vao, 2, buffer[2], 0, 2 * sizeof(float));
+        glVertexArrayAttribFormat(_vao, 2, 2, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribBinding(_vao, 2, 2);
+        glEnableVertexArrayAttrib(_vao, 2);
+
+        glNamedBufferStorage(buffer[3], sizeof(float) * _tangents.size(), _tangents.data(), 0);
+        glVertexArrayVertexBuffer(_vao, 3, buffer[3], 0, 3 * sizeof(float));
+        glVertexArrayAttribFormat(_vao, 3, 3, GL_FLOAT, GL_FALSE, 0);
+        glVertexArrayAttribBinding(_vao, 3, 3);
+        glEnableVertexArrayAttrib(_vao, 3);
+        glBindVertexArray(0);
+
+        _tangents.clear();
+    }
 private:
     std::shared_ptr<dg::vertexArray> _vertexArray;
     std::shared_ptr<dg::vertexArray> _squareVertexArray;
@@ -212,6 +307,16 @@ private:
     float _cameraRotation = 0.0f;
 
     glm::vec3 _squarePosition;
+
+    //torus
+    std::vector<float> _vertices;
+    std::vector<float> _normal;
+    std::vector<float> _textCoord;
+    std::vector<float> _tangents;
+    std::vector<glm::vec3> _tang;
+
+    uint32_t _vao;
+    uint32_t _vertexCount;
 };
 
 class sandbox: public dg::application {
